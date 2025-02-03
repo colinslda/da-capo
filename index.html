@@ -4,38 +4,31 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login</title>
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@1.19.0/dist/umd/supabase.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
 </head>
 <body>
     <h2>Login</h2>
     <form id="login-form">
         <label for="email">Email:</label>
-        <input type="email" id="email" name="email" required>
-        <br>
+        <input type="email" id="email" required>
         <label for="password">Password:</label>
-        <input type="password" id="password" name="password" required>
-        <br>
+        <input type="password" id="password" required>
         <button type="submit">Login</button>
     </form>
-
     <script>
         // Initialize Supabase
-        const SUPABASE_URL = 'https://efnhqqgddfuxwmnrguns.supabase.co';
-        const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVmbmhxcWdkZGZ1eHdtbnJndW5zIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Mzg1ODYyMzUsImV4cCI6MjA1NDE2MjIzNX0.XdVYATptiop5yAUtvPZCWxPo-gcKwYuflvsjvkqEG-w';
-        const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+        const supabaseUrl = 'https://efnhqqgddfuxwmnrguns.supabase.co';
+        const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVmbmhxcWdkZGZ1eHdtbnJndW5zIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Mzg1ODYyMzUsImV4cCI6MjA1NDE2MjIzNX0.XdVYATptiop5yAUtvPZCWxPo-gcKwYuflvsjvkqEG-w';
+        const supabase = supabase.createClient(supabaseUrl, supabaseKey);
 
-        const loginForm = document.getElementById('login-form');
-
-        loginForm.addEventListener('submit', async (event) => {
+        // Handle form submission
+        document.getElementById('login-form').addEventListener('submit', async (event) => {
             event.preventDefault();
-
             const email = document.getElementById('email').value;
             const password = document.getElementById('password').value;
-
-            const { user, error } = await supabase.auth.signIn({ email, password });
-
+            const { error } = await supabase.auth.signInWithPassword({ email, password });
             if (error) {
-                alert('Error logging in: ' + error.message);
+                alert('Login failed: ' + error.message);
             } else {
                 window.location.href = 'main.html';
             }
