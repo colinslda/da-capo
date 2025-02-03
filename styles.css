@@ -3,38 +3,60 @@ body {
   font-family: Arial, sans-serif;
   margin: 0;
   padding: 0;
+  background-color: #f4f4f9;
 }
 
-header, nav, main {
-  padding: 10px;
-}
-
-/* Page d'authentification */
 .auth-container {
   max-width: 400px;
   margin: auto;
   padding-top: 50px;
   text-align: center;
+  background-color: #fff;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
+  padding: 20px;
+}
+
+.auth-container h1 {
+  margin-bottom: 20px;
+  color: #333;
 }
 
 .auth-container input {
   width: 90%;
   padding: 10px;
   margin: 5px 0;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  box-sizing: border-box;
 }
 
 .auth-container button {
   padding: 10px;
   width: 95%;
   margin-top: 10px;
+  border: none;
+  border-radius: 5px;
+  background-color: #007bff;
+  color: #fff;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.auth-container button:hover {
+  background-color: #0056b3;
+}
+
+.auth-container p {
+  color: red;
 }
 
 /* Navigation par onglets */
 nav {
   display: flex;
   justify-content: space-around;
-  background-color: #eee;
-  border-bottom: 1px solid #ccc;
+  background-color: #007bff;
+  border-bottom: 1px solid #0056b3;
 }
 
 .tab-button {
@@ -44,10 +66,11 @@ nav {
   background: none;
   cursor: pointer;
   font-size: 16px;
+  color: #fff;
 }
 
 .tab-button.active {
-  background-color: #ddd;
+  background-color: #0056b3;
   font-weight: bold;
 }
 
@@ -70,6 +93,8 @@ nav {
   border: 1px solid #ccc;
   padding: 10px;
   margin: 5px 0;
+  background-color: #fff;
+  border-radius: 5px;
 }
 
 .notes-section {
@@ -79,10 +104,23 @@ nav {
 .notes-section input {
   width: 80%;
   padding: 5px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  box-sizing: border-box;
 }
 
 .notes-section button {
   padding: 5px;
+  border: none;
+  border-radius: 5px;
+  background-color: #007bff;
+  color: #fff;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.notes-section button:hover {
+  background-color: #0056b3;
 }
 
 /* Style du métronome */
