@@ -21,6 +21,21 @@ document.getElementById('loginForm')?.addEventListener('submit', async (e) => {
     }
 });
 
+// Fonction pour charger les infos de l'utilisateur connecté
+function loadUserData(user) {
+    document.getElementById("profileInfo").innerHTML = `
+        <p><strong>Email:</strong> ${user.email}</p>
+    `;
+}
+
+// Rediriger vers la page de connexion si non connecté
+function redirectToLogin() {
+    window.location.href = "/login.html"; // Remplace par l'URL de ta page de connexion
+}
+
+// Vérifier la session au chargement de l'app
+checkUserSession();
+
 // Métronome amélioré
 class Metronome {
     constructor() {
@@ -174,3 +189,19 @@ if ('serviceWorker' in navigator) {
         navigator.serviceWorker.register('service-worker.js');
     });
 }
+
+const supabase = supabase.createClient("https://YOUR_SUPABASE_URL", "YOUR_SUPABASE_ANON_KEY");
+
+// Vérifier si l'utilisateur est déjà connecté au chargement de la page
+async function checkUserSession() {
+    const { data: { session } } = await supabase.auth.getSession();
+
+    if (session) {
+        console.log("Utilisateur connecté :", session.user);
+        loadUserData(session.user);
+    } else {
+        console.log("Aucune session trouvée, redirection vers la connexion.");
+        redirectToLogin();
+    }
+}
+
