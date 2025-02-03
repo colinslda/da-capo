@@ -1,0 +1,109 @@
+:root {
+    --primary-color: #2c3e50;
+    --secondary-color: #3498db;
+    --background: #f5f6fa;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Helvetica Neue', sans-serif;
+    background: var(--background);
+    height: 100vh;
+}
+
+.login-body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background: linear-gradient(135deg, #2c3e50, #3498db);
+}
+
+.login-container {
+    background: white;
+    padding: 2rem;
+    border-radius: 15px;
+    box-shadow: 0 0 20px rgba(0,0,0,0.2);
+    width: 90%;
+    max-width: 400px;
+}
+
+.container {
+    padding: 20px;
+    padding-bottom: 80px;
+    min-height: 100vh;
+    box-sizing: border-box;
+}
+
+.tab-content {
+    display: none;
+}
+
+.tab-content.active {
+    display: block;
+}
+
+.nav-tabs {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: white;
+    display: flex;
+    justify-content: space-around;
+    padding: 15px 0;
+    box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
+    border-radius: 20px 20px 0 0;
+}
+
+.tab-button {
+    background: none;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 25px;
+    font-size: 14px;
+    transition: all 0.3s;
+}
+
+.tab-button.active {
+    background: var(--secondary-color);
+    color: white;
+}
+
+input, textarea, button {
+    width: 100%;
+    padding: 12px;
+    margin: 8px 0;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-sizing: border-box;
+}
+
+button {
+    background: var(--secondary-color);
+    color: white;
+    border: none;
+    cursor: pointer;
+    transition: opacity 0.3s;
+}
+
+button:active {
+    opacity: 0.8;
+}
+
+.metronome-controls {
+    text-align: center;
+    margin-top: 30px;
+}
+
+#bpmRange {
+    width: 80%;
+    margin: 20px 0;
+}
+
+.bpm-display {
+    font-size: 2em;
+    margin: 20px 0;
+    color: var(--primary-color);
+}
