@@ -8,12 +8,12 @@
   "icons": [
     {
       "src": "x",
-      "sizes": "72x72",
+      "sizes": "dc-72",
       "type": "image/png"
     },
     {
       "src": "x",
-      "sizes": "512x512",
+      "sizes": "dc-512",
       "type": "image/png"
     }
   ]
