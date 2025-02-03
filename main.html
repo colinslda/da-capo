@@ -65,12 +65,29 @@
       <div id="chronoHistory"></div>
     </div>
     
-    <!-- Onglet Profil -->
-    <div id="profil" class="tab-content">
-      <h2>Profil</h2>
-      <div id="profileInfo"></div>
-      <button id="logout">Déconnexion</button>
+  <!-- Onglet Profil amélioré -->
+<div id="profil" class="tab-content">
+    <h2>Profil</h2>
+    
+    <!-- Affichage des infos utilisateur -->
+    <div id="profileInfo">
+        <p><strong>Nom :</strong> <span id="userName">Chargement...</span></p>
+        <p><strong>Email :</strong> <span id="userEmail">Chargement...</span></p>
     </div>
+
+    <!-- Biographie modifiable -->
+    <div id="bioSection">
+        <h3>Biographie</h3>
+        <textarea id="userBio" placeholder="Écris ta biographie ici..."></textarea>
+        <button id="saveBio">Enregistrer</button>
+    </div>
+
+    <!-- Accès aux réglages -->
+    <button id="settingsBtn">⚙️ Réglages du compte</button>
+
+    <!-- Bouton Déconnexion -->
+    <button id="logout">Déconnexion</button>
+</div>
 
     <!-- Navigation -->
     <div class="nav-tabs">
