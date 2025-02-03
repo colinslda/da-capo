@@ -1,35 +1,39 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <title>DA CAPO</title>
-    <link rel="stylesheet" href="app.css">
-    <link rel="manifest" href="manifest.json">
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <meta charset="UTF-8">
+  <!-- iPhone et safe-area -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>DA CAPO</title>
+  <link rel="stylesheet" href="app.css">
+  <link rel="manifest" href="manifest.json">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  
+  <!-- Pour iOS: barre du haut en dégradé (optionnel) -->
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 </head>
 <body>
-    <div class="container">
-        <!-- Onglet Répertoire -->
-        <div id="repertoire" class="tab-content active">
-            <h2>Répertoire</h2>
-            <form id="addPiece">
-                <input type="text" id="pieceTitle" placeholder="Titre" required>
-                <input type="text" id="composer" placeholder="Compositeur">
-                <textarea id="notes" placeholder="Notes personnelles"></textarea>
-                <button type="submit">Ajouter</button>
-            </form>
-            <div id="piecesList"></div>
-        </div>
+  <div class="container">
+    <!-- Onglet Répertoire -->
+    <div id="repertoire" class="tab-content active">
+      <h2>Répertoire</h2>
+      <form id="addPiece">
+        <input type="text" id="pieceTitle" placeholder="Titre" required>
+        <input type="text" id="composer" placeholder="Compositeur">
+        <textarea id="notes" placeholder="Notes personnelles"></textarea>
+        <button type="submit">Ajouter</button>
+      </form>
+      <div id="piecesList"></div>
+    </div>
 
-     <!-- Onglet Métronome -->
-<div id="metronome" class="tab-content">
-    <h2>Métronome</h2>
-    <div class="metronome-container">
+    <!-- Onglet Métronome -->
+    <div id="metronome" class="tab-content">
+      <h2>Métronome</h2>
+      <div class="metronome-container">
         <div class="bpm-controls">
-            <button id="bpmDown">-</button>
-            <div id="bpmValue" class="bpm-display">120</div>
-            <button id="bpmUp">+</button>
+          <button id="bpmDown">-</button>
+          <div id="bpmValue" class="bpm-display">120</div>
+          <button id="bpmUp">+</button>
         </div>
         
         <input type="range" id="bpmRange" 
@@ -39,29 +43,74 @@
         <div class="beat-indicator"></div>
         
         <button id="startStop" class="metro-button">
-            Démarrer
+          Démarrer
         </button>
         
         <button id="tapTempo" class="metro-button">
-            Tap Tempo
+          Tap Tempo
         </button>
+      </div>
     </div>
-</div>
-        
-        <!-- Onglet Profil -->
-        <div id="profil" class="tab-content">
-            <h2>Profil</h2>
-            <div id="profileInfo"></div>
-            <button id="logout">Déconnexion</button>
-        </div>
+    
+    <!-- Onglet Chrono (nouveau) -->
+    <div id="chrono" class="tab-content">
+      <h2>Chrono</h2>
+      <div class="chrono-container">
+        <div id="chronoDisplay">00:00</div>
+        <button id="startChrono" class="chrono-btn">Démarrer</button>
+        <button id="stopChrono" class="chrono-btn">Arrêter</button>
+        <button id="resetChrono" class="chrono-btn">Réinitialiser</button>
+      </div>
+      <!-- Tu pourrais enregistrer l’historique des temps de pratique -->
+      <div id="chronoHistory"></div>
+    </div>
+    
+    <!-- Onglet Profil -->
+    <div id="profil" class="tab-content">
+      <h2>Profil</h2>
+      <div id="profileInfo"></div>
+      <button id="logout">Déconnexion</button>
+    </div>
 
-        <!-- Navigation -->
-        <div class="nav-tabs">
-            <button class="tab-button active" onclick="switchTab('repertoire')">🎵 Répertoire</button>
-            <button class="tab-button" onclick="switchTab('metronome')">🎶 Métronome</button>
-            <button class="tab-button" onclick="switchTab('profil')">👤 Profil</button>
-        </div>
+    <!-- Navigation -->
+    <div class="nav-tabs">
+      <button class="tab-button active" onclick="switchTab('repertoire')">🎵 Répertoire</button>
+      <button class="tab-button" onclick="switchTab('metronome')">🎶 Métronome</button>
+      <button class="tab-button" onclick="switchTab('chrono')">⏱ Chrono</button>
+      <button class="tab-button" onclick="switchTab('profil')">👤 Profil</button>
     </div>
-    <script src="app.js"></script>
+  </div>
+  
+  <script src="app.js"></script>
+  <script>
+    // Exemple JS pour gérer le chrono
+    let chronoInterval;
+    let seconds = 0;
+    
+    function updateChronoDisplay() {
+      const minutes = String(Math.floor(seconds / 60)).padStart(2, '0');
+      const secs = String(seconds % 60).padStart(2, '0');
+      document.getElementById("chronoDisplay").textContent = `${minutes}:${secs}`;
+    }
+
+    document.getElementById("startChrono").addEventListener("click", () => {
+      if (!chronoInterval) {
+        chronoInterval = setInterval(() => {
+          seconds++;
+          updateChronoDisplay();
+        }, 1000);
+      }
+    });
+
+    document.getElementById("stopChrono").addEventListener("click", () => {
+      clearInterval(chronoInterval);
+      chronoInterval = null;
+    });
+
+    document.getElementById("resetChrono").addEventListener("click", () => {
+      seconds = 0;
+      updateChronoDisplay();
+    });
+  </script>
 </body>
 </html>
