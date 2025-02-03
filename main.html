@@ -22,16 +22,32 @@
             <div id="piecesList"></div>
         </div>
 
-        <!-- Onglet Métronome -->
-        <div id="metronome" class="tab-content">
-            <h2>Métronome</h2>
-            <div class="metronome-controls">
-                <div class="bpm-display">♬ <span id="bpm">120</span> BPM</div>
-                <input type="range" id="bpmRange" min="40" max="240" value="120">
-                <button id="startStop">Démarrer</button>
-            </div>
+     <!-- Onglet Métronome -->
+<div id="metronome" class="tab-content">
+    <h2>Métronome</h2>
+    <div class="metronome-container">
+        <div class="bpm-controls">
+            <button id="bpmDown">-</button>
+            <div id="bpmValue" class="bpm-display">120</div>
+            <button id="bpmUp">+</button>
         </div>
-
+        
+        <input type="range" id="bpmRange" 
+               min="40" max="240" value="120" 
+               class="bpm-slider">
+        
+        <div class="beat-indicator"></div>
+        
+        <button id="startStop" class="metro-button">
+            Démarrer
+        </button>
+        
+        <button id="tapTempo" class="metro-button">
+            Tap Tempo
+        </button>
+    </div>
+</div>
+        
         <!-- Onglet Profil -->
         <div id="profil" class="tab-content">
             <h2>Profil</h2>
