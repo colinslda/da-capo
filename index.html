@@ -15,6 +15,9 @@
       <input type="password" id="password" placeholder="Mot de passe" required>
       <button type="submit">S'inscrire</button>
     </form>
+
+    <p>Déjà un compte ?</p>
+    <button id="login-button">Se connecter</button>
   </div>
 
   <script>
@@ -33,6 +36,11 @@
       } else {
         window.location.href = "main.html";
       }
+    });
+
+    // Redirection vers la page de connexion
+    document.getElementById('login-button').addEventListener('click', () => {
+      window.location.href = "login.html";
     });
   </script>
 </body>
