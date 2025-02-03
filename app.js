@@ -190,7 +190,7 @@ if ('serviceWorker' in navigator) {
     });
 }
 
-const supabase = supabase.createClient("https://YOUR_SUPABASE_URL", "YOUR_SUPABASE_ANON_KEY");
+const supabase = supabase.createClient("https://efnhqqgddfuxwmnrguns.supabase.co", "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVmbmhxcWdkZGZ1eHdtbnJndW5zIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Mzg1ODYyMzUsImV4cCI6MjA1NDE2MjIzNX0.XdVYATptiop5yAUtvPZCWxPo-gcKwYuflvsjvkqEG-w");
 
 // Vérifier si l'utilisateur est déjà connecté au chargement de la page
 async function checkUserSession() {
@@ -204,4 +204,71 @@ async function checkUserSession() {
         redirectToLogin();
     }
 }
+
+const supabase = supabase.createClient("https://efnhqqgddfuxwmnrguns.supabase.co", "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVmbmhxcWdkZGZ1eHdtbnJndW5zIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Mzg1ODYyMzUsImV4cCI6MjA1NDE2MjIzNX0.XdVYATptiop5yAUtvPZCWxPo-gcKwYuflvsjvkqEG-w");
+
+// Vérifier la session et charger les infos de l'utilisateur
+async function checkUserSession() {
+    const { data: { session } } = await supabase.auth.getSession();
+
+    if (session) {
+        console.log("Utilisateur connecté :", session.user);
+        loadUserData(session.user);
+    } else {
+        console.log("Aucune session trouvée, redirection vers la connexion.");
+        window.location.href = "/login.html";
+    }
+}
+
+// Charger les infos utilisateur dans le profil
+async function loadUserData(user) {
+    document.getElementById("userName").textContent = user.user_metadata?.full_name || "Nom inconnu";
+    document.getElementById("userEmail").textContent = user.email;
+
+    // Récupérer la bio stockée
+    const { data, error } = await supabase
+        .from("users")
+        .select("bio")
+        .eq("id", user.id)
+        .single();
+
+    if (data && data.bio) {
+        document.getElementById("userBio").value = data.bio;
+    }
+}
+
+// Sauvegarder la biographie
+document.getElementById("saveBio").addEventListener("click", async () => {
+    const bio = document.getElementById("userBio").value;
+    const { data: { session } } = await supabase.auth.getSession();
+
+    if (!session) return;
+
+    const { error } = await supabase
+        .from("users")
+        .update({ bio: bio })
+        .eq("id", session.user.id);
+
+    if (error) {
+        alert("Erreur lors de la sauvegarde de la bio.");
+    } else {
+        alert("Biographie enregistrée !");
+    }
+});
+
+// Bouton pour accéder aux réglages
+document.getElementById("settingsBtn").addEventListener("click", () => {
+    alert("🚧 Fonctionnalité en cours de développement !");
+});
+
+// Déconnexion avec redirection
+document.getElementById("logout").addEventListener("click", async () => {
+    await supabase.auth.signOut();
+    localStorage.removeItem("supabaseSession"); // Supprime la session stockée
+    window.location.href = "/login.html"; // Redirection après déconnexion
+});
+
+// Vérifier la session au chargement de l'app
+checkUserSession();
+
 
