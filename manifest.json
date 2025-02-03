@@ -1,20 +1,20 @@
 {
-    "name": "DA CAPO",
-    "short_name": "DA CAPO",
-    "start_url": "/",
-    "display": "standalone",
-    "background_color": "#2c3e50",
-    "theme_color": "#3498db",
-    "icons": [
-        {
-            "src": "icons/icon-72x72.png",
-            "sizes": "72x72",
-            "type": "image/png"
-        },
-        {
-            "src": "icons/icon-512x512.png",
-            "sizes": "512x512",
-            "type": "image/png"
-        }
-    ]
+  "name": "DA CAPO",
+  "short_name": "DA CAPO",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#9A80E8",
+  "theme_color": "#6E72FF",
+  "icons": [
+    {
+      "src": "x",
+      "sizes": "72x72",
+      "type": "image/png"
+    },
+    {
+      "src": "x",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
 }
