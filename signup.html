@@ -3,17 +3,18 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Connexion</title>
+  <title>Créer un compte</title>
   <!-- Inclusion de la bibliothèque Supabase via CDN -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js/dist/umd/supabase.min.js"></script>
 </head>
 <body>
-  <h1>Connexion</h1>
-  <form id="login-form">
+  <h1>Inscription</h1>
+  <form id="signup-form">
     <input type="email" id="email" placeholder="Adresse email" required>
     <input type="password" id="password" placeholder="Mot de passe" required>
-    <button type="submit">Se connecter</button>
+    <button type="submit">S'inscrire</button>
   </form>
+
 
   <script>
     // Configuration de Supabase avec tes clés
@@ -21,19 +22,23 @@
     const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVmbmhxcWdkZGZ1eHdtbnJndW5zIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Mzg1ODYyMzUsImV4cCI6MjA1NDE2MjIzNX0.XdVYATptiop5yAUtvPZCWxPo-gcKwYuflvsjvkqEG-w';
     const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
+
     // Écouteur de soumission du formulaire
-    document.getElementById('login-form').addEventListener('submit', async (e) => {
+    document.getElementById('signup-form').addEventListener('submit', async (e) => {
       e.preventDefault();
       const email = document.getElementById('email').value;
       const password = document.getElementById('password').value;
 
-      // Connexion de l'utilisateur
-      const { data, error } = await supabaseClient.auth.signInWithPassword({ email, password });
+
+      // Appel à la méthode signUp pour créer un nouvel utilisateur
+      const { data, error } = await supabaseClient.auth.signUp({ email, password });
+
 
       if (error) {
         alert("Erreur : " + error.message);
       } else {
-        // Redirection après connexion réussie
+        // Si aucune confirmation par email n'est requise, on redirige vers main.html
+        // Sinon, il faudra attendre la confirmation ou adapter la logique.
         window.location.href = "main.html";
       }
     });
