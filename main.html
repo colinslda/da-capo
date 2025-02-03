@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>DA CAPO</title>
+    <link rel="stylesheet" href="app.css">
+    <link rel="manifest" href="manifest.json">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body>
+    <div class="container">
+        <!-- Onglet Répertoire -->
+        <div id="repertoire" class="tab-content active">
+            <h2>Répertoire</h2>
+            <form id="addPiece">
+                <input type="text" id="pieceTitle" placeholder="Titre" required>
+                <input type="text" id="composer" placeholder="Compositeur">
+                <textarea id="notes" placeholder="Notes personnelles"></textarea>
+                <button type="submit">Ajouter</button>
+            </form>
+            <div id="piecesList"></div>
+        </div>
+
+        <!-- Onglet Métronome -->
+        <div id="metronome" class="tab-content">
+            <h2>Métronome</h2>
+            <div class="metronome-controls">
+                <div class="bpm-display">♬ <span id="bpm">120</span> BPM</div>
+                <input type="range" id="bpmRange" min="40" max="240" value="120">
+                <button id="startStop">Démarrer</button>
+            </div>
+        </div>
+
+        <!-- Onglet Profil -->
+        <div id="profil" class="tab-content">
+            <h2>Profil</h2>
+            <div id="profileInfo"></div>
+            <button id="logout">Déconnexion</button>
+        </div>
+
+        <!-- Navigation -->
+        <div class="nav-tabs">
+            <button class="tab-button active" onclick="switchTab('repertoire')">🎵 Répertoire</button>
+            <button class="tab-button" onclick="switchTab('metronome')">🎶 Métronome</button>
+            <button class="tab-button" onclick="switchTab('profil')">👤 Profil</button>
+        </div>
+    </div>
+    <script src="app.js"></script>
+</body>
+</html>
