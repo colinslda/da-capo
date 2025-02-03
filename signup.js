@@ -1,30 +1,26 @@
-// Initialize Supabase client
-const supabaseUrl = 'https://efnhqqgddfuxwmnrguns.supabase.co';
-const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVmbmhxcWdkZGZ1eHdtbnJndW5zIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Mzg1ODYyMzUsImV4cCI6MjA1NDE2MjIzNX0.XdVYATptiop5yAUtvPZCWxPo-gcKwYuflvsjvkqEG-w';
-const supabase = supabase.createClient(supabaseUrl, supabaseKey);
-
-document.getElementById('signup-form').addEventListener('submit', async (event) => {
-  event.preventDefault();
-
-  const firstName = document.getElementById('first-name').value;
-  const lastName = document.getElementById('last-name').value;
-  const email = document.getElementById('email').value;
-  const password = document.getElementById('password').value;
-
-  const { user, error } = await supabase.auth.signUp({
-    email: email,
-    password: password,
-    options: {
-      data: {
-        first_name: firstName,
-        last_name: lastName
-      }
-    }
-  });
-
-  if (error) {
-    document.getElementById('error-message').textContent = error.message;
-  } else {
-    window.location.href = 'index.html'; // Redirect to the main page
-  }
-});
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DA CAPO - Nouveau compte</title>
+  <link rel="manifest" href="manifest.json">
+  <link rel="stylesheet" href="styles.css">
+  <!-- Import de la bibliothèque SupaBase -->
+  <script src="https://unpkg.com/@supabase/supabase-js@1.35.7/dist/supabase.min.js" type="text/javascript"></script>
+</head>
+<body>
+  <div class="auth-container">
+    <h1>DA CAPO - Nouveau compte</h1>
+    <form id="signup-form">
+      <input type="text" id="first-name" placeholder="Prénom" required>
+      <input type="text" id="last-name" placeholder="Nom" required>
+      <input type="email" id="email" placeholder="Adresse mail" required>
+      <input type="password" id="password" placeholder="Mot de passe" required>
+      <button type="submit">Créer un compte</button>
+    </form>
+    <p id="error-message"></p>
+  </div>
+  <script src="signup.js"></script>
+</body>
+</html>
