@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, viewport-fit=cover" />
+  <title>DA CAPO - Nous contacter</title>
+  <!-- Police "Playfair Display" -->
+  <link
+    href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&display=swap"
+    rel="stylesheet"
+  />
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: Arial, sans-serif;
+      background: linear-gradient(135deg, #f8f0ff 0%, #fcfaff 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+    }
+
+    .contact-container {
+      background-color: #fff;
+      border-radius: 30px;
+      padding: 40px;
+      box-shadow: 0 8px 20px rgba(150, 100, 200, 0.15);
+      max-width: 400px;
+      width: 100%;
+      text-align: center;
+    }
+
+    h1 {
+      margin-bottom: 30px;
+      font-size: 1.8rem;
+      color: #8c73b9;
+      font-family: 'Playfair Display', serif;
+    }
+
+    form {
+      display: flex;
+      flex-direction: column;
+    }
+
+    input[type="text"],
+    input[type="email"],
+    textarea {
+      margin: 10px 0;
+      padding: 12px;
+      border: 2px solid #e5def0;
+      border-radius: 30px;
+      font-size: 0.95rem;
+      outline: none;
+    }
+
+    textarea {
+      resize: none;
+      height: 100px;
+      border-radius: 20px; /* arrondi un peu moins prononcé */
+    }
+
+    button {
+      margin-top: 16px;
+      padding: 12px;
+      border: none;
+      border-radius: 30px;
+      font-size: 1rem;
+      color: #fff;
+      background-color: #b49ddb;
+      cursor: pointer;
+      transition: background-color 0.2s ease;
+    }
+
+    button:hover {
+      background-color: #a38acb;
+    }
+
+    /* Message de confirmation ou d'erreur */
+    .feedback {
+      margin-top: 15px;
+      color: #8c73b9;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <div class="contact-container">
+    <h1>Nous contacter</h1>
+    <!-- Formulaire pour collecter les infos -->
+    <form id="contact-form">
+      <input type="text" name="name" placeholder="Votre nom" required />
+      <input type="email" name="email" placeholder="Votre email" required />
+      <textarea name="message" placeholder="Votre message" required></textarea>
+      <button type="submit">Envoyer</button>
+    </form>
+    <div class="feedback" id="feedback-msg"></div>
+  </div>
+
+  <!-- Script EmailJS -->
+  <script
+    type="text/javascript"
+    src="https://cdn.jsdelivr.net/npm/emailjs-com@2.4.1/dist/email.min.js"
+  ></script>
+  <script type="text/javascript">
+    // Initialise EmailJS avec ta clé publique
+    emailjs.init("gkjdKOtq9kv2EMCew");
+
+    // Récupération du formulaire
+    const form = document.getElementById("contact-form");
+    const feedbackMsg = document.getElementById("feedback-msg");
+
+    form.addEventListener("submit", function (event) {
+      event.preventDefault();
+
+      // Préparer l'objet avec les infos nécessaires
+      const formData = {
+        name: form.name.value,
+        email: form.email.value,
+        message: form.message.value,
+      };
+
+      // Envoi via EmailJS : send(serviceID, templateID, data)
+      emailjs
+        .send("service_ypcuxe3", "template_7sro1q5", formData)
+        .then((response) => {
+          console.log("SUCCESS!", response.status, response.text);
+          feedbackMsg.style.color = "green";
+          feedbackMsg.innerText = "Votre message a bien été envoyé !";
+          form.reset(); // Reset des champs
+        })
+        .catch((error) => {
+          console.log("FAILED...", error);
+          feedbackMsg.style.color = "red";
+          feedbackMsg.innerText =
+            "Une erreur s'est produite. Veuillez réessayer plus tard.";
+        });
+    });
+  </script>
+</body>
+</html>
