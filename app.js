@@ -1,21 +1,24 @@
-const supabase = createClient(
-    'https://efnhqqgddfuxwmnrguns.supabase.co',
-    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVmbmhxcWdkZGZ1eHdtbnJndW5zIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Mzg1ODYyMzUsImV4cCI6MjA1NDE2MjIzNX0.XdVYATptiop5yAUtvPZCWxPo-gcKwYuflvsjvkqEG-w'
-);
+// Initialisation du client Supabase
+const supabaseUrl = 'https://efnhqqgddfuxwmnrguns.supabase.co';
+const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVmbmhxcWdkZGZ1eHdtbnJndW5zIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Mzg1ODYyMzUsImV4cCI6MjA1NDE2MjIzNX0.XdVYATptiop5yAUtvPZCWxPo-gcKwYuflvsjvkqEG-w';
+const supabase = supabase.createClient(supabaseUrl, supabaseKey);
 
 // Gestion de la connexion
 document.getElementById('loginForm')?.addEventListener('submit', async (e) => {
     e.preventDefault();
     const email = document.getElementById('email').value;
     const password = document.getElementById('password').value;
-    
-    const { error } = await supabase.auth.signInWithPassword({
+
+    const { data, error } = await supabase.auth.signInWithPassword({
         email,
         password
     });
 
-    if (!error) window.location.href = 'main.html';
-    else alert('Erreur de connexion');
+    if (error) {
+        alert('Erreur de connexion : ' + error.message);
+    } else {
+        window.location.href = 'main.html';
+    }
 });
 
 // Métronome
@@ -26,14 +29,14 @@ const audioContext = new (window.AudioContext || window.webkitAudioContext)();
 function playClick() {
     const oscillator = audioContext.createOscillator();
     const gainNode = audioContext.createGain();
-    
+
     oscillator.connect(gainNode);
     gainNode.connect(audioContext.destination);
-    
+
     oscillator.frequency.setValueAtTime(1000, audioContext.currentTime);
     gainNode.gain.setValueAtTime(1, audioContext.currentTime);
     gainNode.gain.exponentialRampToValueAtTime(0.001, audioContext.currentTime + 0.1);
-    
+
     oscillator.start();
     oscillator.stop(audioContext.currentTime + 0.1);
 }
