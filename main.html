@@ -2,42 +2,30 @@
 <html lang="fr">
 <head>
   <meta charset="UTF-8">
-  <title>Main</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DA CAPO</title>
+  <link rel="stylesheet" href="styles.css">
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js/dist/umd/supabase.min.js"></script>
-  <script>
-    // Configuration de Supabase
-    const SUPABASE_URL = 'https://efnhqqgddfuxwmnrguns.supabase.co';
-    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVmbmhxcWdkZGZ1eHdtbnJndW5zIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Mzg1ODYyMzUsImV4cCI6MjA1NDE2MjIzNX0.XdVYATptiop5yAUtvPZCWxPo-gcKwYuflvsjvkqEG-w';
-    const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-
-    // Vérifier la session dès que le DOM est chargé
-    document.addEventListener('DOMContentLoaded', async () => {
-      const { data: { session } } = await supabaseClient.auth.getSession();
-      if (!session) {
-        // Pas de session active, rediriger vers la page d'inscription
-        window.location.href = "index.html";
-      }
-    });
-  </script>
 </head>
+<body>
+  <header>
     <h1>DA CAPO</h1>
     <nav>
       <button class="tab-button active" data-tab="repertoire">Répertoire</button>
       <button class="tab-button" data-tab="metronome">Métronome</button>
     </nav>
   </header>
+
   <main>
-    <!-- Onglet Répertoire -->
     <section id="repertoire" class="tab-content active">
       <h2>Mes Pièces</h2>
       <form id="piece-form">
         <input type="text" id="piece-title" placeholder="Nom de la pièce" required>
-        <button type="submit">Ajouter la pièce</button>
+        <button type="submit">Ajouter</button>
       </form>
       <ul id="pieces-list"></ul>
     </section>
 
-    <!-- Onglet Métronome -->
     <section id="metronome" class="tab-content">
       <h2>Métronome</h2>
       <div id="metronome-container">
@@ -49,6 +37,7 @@
       </div>
     </section>
   </main>
+
   <script src="main.js"></script>
 </body>
 </html>
