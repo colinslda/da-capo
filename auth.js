@@ -1,8 +1,11 @@
-// Initialisation de SupaBase
+// Importing Supabase client
+import { createClient } from '@supabase/supabase-js';
+
+// Initialize Supabase client
 const SUPABASE_URL = 'https://efnhqqgddfuxwmnrguns.supabase.co';
 const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVmbmhxcWdkZGZ1eHdtbnJndW5zIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Mzg1ODYyMzUsImV4cCI6MjA1NDE2MjIzNX0.XdVYATptiop5yAUtvPZCWxPo-gcKwYuflvsjvkqEG-w';
 
-const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
 document.getElementById('auth-form').addEventListener('submit', async (e) => {
   e.preventDefault();
