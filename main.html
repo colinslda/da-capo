@@ -2,25 +2,24 @@
 <html lang="fr">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>DA CAPO - Accueil</title>
-  <link rel="manifest" href="manifest.json">
-  <link rel="stylesheet" href="styles.css">
-</head>
-<body>
+  <title>Main</title>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js/dist/umd/supabase.min.js"></script>
   <script>
+    // Configuration de Supabase
     const SUPABASE_URL = 'https://efnhqqgddfuxwmnrguns.supabase.co';
     const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVmbmhxcWdkZGZ1eHdtbnJndW5zIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Mzg1ODYyMzUsImV4cCI6MjA1NDE2MjIzNX0.XdVYATptiop5yAUtvPZCWxPo-gcKwYuflvsjvkqEG-w';
     const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-    const session = supabaseClient.auth.session();
-    if (!session) {
-      // Rediriger vers la page d'inscription/connexion si l'utilisateur n'est pas connecté
-      window.location.href = "index.html";
-    }
+    // Vérifier la session dès que le DOM est chargé
+    document.addEventListener('DOMContentLoaded', async () => {
+      const { data: { session } } = await supabaseClient.auth.getSession();
+      if (!session) {
+        // Pas de session active, rediriger vers la page d'inscription
+        window.location.href = "index.html";
+      }
+    });
   </script>
-  <header>
+</head>
     <h1>DA CAPO</h1>
     <nav>
       <button class="tab-button active" data-tab="repertoire">Répertoire</button>
