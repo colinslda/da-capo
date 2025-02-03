@@ -1,44 +1,147 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <title>DA CAPO - Connexion</title>
-    <link rel="stylesheet" href="app.css">
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, viewport-fit=cover" />
+  <title>DA CAPO - Connexion</title>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <!-- Import de la police "Playfair Display" -->
+  <link
+    href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&display=swap"
+    rel="stylesheet"
+  />
+  <style>
+    /* Corps de la page */
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: Arial, sans-serif;
+      background: linear-gradient(135deg, #f8f0ff 0%, #fcfaff 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+    }
+
+    /* Conteneur principal */
+    .login-container {
+      background-color: #fff;
+      border-radius: 30px;
+      padding: 40px;
+      box-shadow: 0 8px 20px rgba(150, 100, 200, 0.15);
+      max-width: 340px;
+      width: 100%;
+      text-align: center;
+    }
+
+    /* Titre */
+    .login-container h1 {
+      margin-bottom: 30px;
+      font-size: 1.8rem;
+      color: #8c73b9;
+      font-family: 'Playfair Display', serif; /* Police classique */
+    }
+
+    /* Formulaire */
+    form {
+      display: flex;
+      flex-direction: column;
+      margin-bottom: 20px;
+    }
+
+    input[type="email"],
+    input[type="password"] {
+      margin: 10px 0;
+      padding: 12px;
+      border: 2px solid #e5def0;
+      border-radius: 30px;
+      font-size: 0.95rem;
+      outline: none;
+    }
+
+    button {
+      margin-top: 10px;
+      padding: 12px;
+      border: none;
+      border-radius: 30px;
+      font-size: 1rem;
+      color: #fff;
+      background-color: #b49ddb;
+      cursor: pointer;
+      transition: background-color 0.2s ease;
+    }
+
+    button:hover {
+      background-color: #a38acb;
+    }
+
+    /* Boutons additionnels */
+    #forgot-password,
+    #signup-button,
+    #help-button {
+      background-color: #e1d3f2;
+      color: #7d61a8;
+      margin-top: 10px;
+    }
+
+    #forgot-password:hover,
+    #signup-button:hover,
+    #help-button:hover {
+      background-color: #d4c4ed;
+    }
+  </style>
 </head>
-<body class="login-body">
-    <div class="login-container">
-        <h1>DA CAPO</h1>
-        <form id="login-form">
-            <input type="email" id="email" placeholder="Email" required>
-            <input type="password" id="password" placeholder="Mot de passe" required>
-            <button type="submit">Se connecter</button>
-        </form>
-        <button id="signup-button">Pas de compte ? Créez-en un !</button>
-    </div>
-    <script>
-        const SUPABASE_URL = 'https://efnhqqgddfuxwmnrguns.supabase.co';
-        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVmbmhxcWdkZGZ1eHdtbnJndW5zIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Mzg1ODYyMzUsImV4cCI6MjA1NDE2MjIzNX0.XdVYATptiop5yAUtvPZCWxPo-gcKwYuflvsjvkqEG-w';
-        const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+<body>
+  <div class="login-container">
+    <h1>DA CAPO</h1>
+    <form id="login-form">
+      <input type="email" id="email" placeholder="Email" required />
+      <input type="password" id="password" placeholder="Mot de passe" required />
+      <button type="submit">Se connecter</button>
+    </form>
+    <button id="forgot-password">Mot de passe oublié ?</button>
+    <button id="signup-button">Pas de compte ? Créez-en un !</button>
+    <button id="help-button">Besoin d'aide ? Contacte-nous !</button>
+  </div>
 
-        document.getElementById('login-form').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const email = document.getElementById('email').value;
-            const password = document.getElementById('password').value;
+  <script>
+    const SUPABASE_URL = 'https://efnhqqgddfuxwmnrguns.supabase.co';
+    const SUPABASE_ANON_KEY =
+      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVmbmhxcWdkZGZ1eHdtbnJndW5zIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Mzg1ODYyMzUsImV4cCI6MjA1NDE2MjIzNX0.XdVYATptiop5yAUtvPZCWxPo-gcKwYuflvsjvkqEG-w';
+    const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-            const { data, error } = await supabaseClient.auth.signInWithPassword({ email, password });
+    // Connexion
+    document.getElementById('login-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const email = document.getElementById('email').value;
+      const password = document.getElementById('password').value;
 
-            if (error) {
-                alert("Erreur : " + error.message);
-            } else {
-                window.location.href = "main.html";
-            }
-        });
+      const { data, error } = await supabaseClient.auth.signInWithPassword({
+        email, 
+        password
+      });
 
-        document.getElementById('signup-button').addEventListener('click', () => {
-            window.location.href = "signup.html";
-        });
-    </script>
+      if (error) {
+        alert('Erreur : ' + error.message);
+      } else {
+        window.location.href = 'main.html';
+      }
+    });
+
+    // Mot de passe oublié
+    document.getElementById('forgot-password').addEventListener('click', () => {
+      window.location.href = 'updt-password.html';
+    });
+
+    // Inscription
+    document.getElementById('signup-button').addEventListener('click', () => {
+      window.location.href = 'signup.html';
+    });
+
+    // Besoin d'aide ?
+    document.getElementById('help-button').addEventListener('click', () => {
+      window.location.href = 'contact.html';
+    });
+  </script>
 </body>
 </html>
