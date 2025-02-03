@@ -1,48 +1,79 @@
-<!DOCTYPE html>
-<html lang="fr">
-<head>
-  <meta charset="UTF-8">
-  <title>Connexion</title>
-  <!-- Inclusion de la bibliothèque Supabase depuis un CDN -->
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js/dist/supabase.min.js"></script>
-  <style>
-    /* Un peu de style pour la forme */
-    body { font-family: Arial, sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; }
-    form { display: flex; flex-direction: column; gap: 10px; width: 300px; }
-  </style>
-</head>
-<body>
-  <form id="loginForm">
-    <h2>Se connecter</h2>
-    <input type="email" id="email" placeholder="Ton email" required>
-    <input type="password" id="password" placeholder="Ton mot de passe" required>
-    <button type="submit">Connexion</button>
-  </form>
+// Initialisation du client Supabase
+const supabaseUrl = 'https://efnhqqgddfuxwmnrguns.supabase.co';
+const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVmbmhxcWdkZGZ1eHdtbnJndW5zIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Mzg1ODYyMzUsImV4cCI6MjA1NDE2MjIzNX0.XdVYATptiop5yAUtvPZCWxPo-gcKwYuflvsjvkqEG-w';
+const supabase = supabase.createClient(supabaseUrl, supabaseKey);
 
-  <script>
-    // Création du client Supabase avec ton URL et ta clé publique
-    const supabaseUrl = 'https://efnhqqgddfuxwmnrguns.supabase.co';
-    const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVmbmhxcWdkZGZ1eHdtbnJndW5zIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Mzg1ODYyMzUsImV4cCI6MjA1NDE2MjIzNX0.XdVYATptiop5yAUtvPZCWxPo-gcKwYuflvsjvkqEG-w';
-    const supabase = supabase.createClient(supabaseUrl, supabaseKey);
+// Gestion de la connexion
+document.getElementById('loginForm')?.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const email = document.getElementById('email').value;
+    const password = document.getElementById('password').value;
 
-    // Gestion du formulaire de connexion
-    document.getElementById('loginForm').addEventListener('submit', async (e) => {
-      e.preventDefault();
-      
-      // Récupération des valeurs du formulaire
-      const email = document.getElementById('email').value;
-      const password = document.getElementById('password').value;
-      
-      // Tentative de connexion via Supabase
-      const { error } = await supabase.auth.signInWithPassword({ email, password });
-      
-      if (error) {
-        alert('Erreur de connexion : ' + error.message);
-      } else {
-        // Redirection en cas de succès
-        window.location.href = 'main.html';
-      }
+    const { data, error } = await supabase.auth.signInWithPassword({
+        email,
+        password
     });
-  </script>
-</body>
-</html>
+
+    if (error) {
+        alert('Erreur de connexion : ' + error.message);
+    } else {
+        window.location.href = 'main.html';
+    }
+});
+
+// Métronome
+let isPlaying = false;
+let timer;
+const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+
+function playClick() {
+    const oscillator = audioContext.createOscillator();
+    const gainNode = audioContext.createGain();
+
+    oscillator.connect(gainNode);
+    gainNode.connect(audioContext.destination);
+
+    oscillator.frequency.setValueAtTime(1000, audioContext.currentTime);
+    gainNode.gain.setValueAtTime(1, audioContext.currentTime);
+    gainNode.gain.exponentialRampToValueAtTime(0.001, audioContext.currentTime + 0.1);
+
+    oscillator.start();
+    oscillator.stop(audioContext.currentTime + 0.1);
+}
+
+document.getElementById('bpmRange')?.addEventListener('input', (e) => {
+    document.getElementById('bpm').textContent = e.target.value;
+});
+
+document.getElementById('startStop')?.addEventListener('click', () => {
+    isPlaying = !isPlaying;
+    document.getElementById('startStop').textContent = isPlaying ? 'Arrêter' : 'Démarrer';
+    if (isPlaying) {
+        const bpm = parseInt(document.getElementById('bpmRange').value);
+        const interval = 60000 / bpm;
+        timer = setInterval(playClick, interval);
+    } else {
+        clearInterval(timer);
+    }
+});
+
+// Navigation
+function switchTab(tabId) {
+    document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
+    document.querySelectorAll('.tab-button').forEach(btn => btn.classList.remove('active'));
+    document.getElementById(tabId).classList.add('active');
+    event.target.classList.add('active');
+}
+
+// Déconnexion
+document.getElementById('logout')?.addEventListener('click', async () => {
+    await supabase.auth.signOut();
+    window.location.href = 'login.html';
+});
+
+// Service Worker
+if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+        navigator.serviceWorker.register('service-worker.js');
+    });
+}
