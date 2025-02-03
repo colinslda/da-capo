@@ -2,132 +2,92 @@
 <html lang="fr">
 <head>
   <meta charset="UTF-8">
-  <!-- iPhone et safe-area -->
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <title>DA CAPO</title>
-  <link rel="stylesheet" href="app.css">
-  <link rel="manifest" href="manifest.json">
+  <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  
-  <!-- Pour iOS: barre du haut en dégradé (optionnel) -->
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 </head>
-<body>
-  <div class="container">
-    <!-- Onglet Répertoire -->
-    <div id="repertoire" class="tab-content active">
-      <h2>Répertoire</h2>
-      <form id="addPiece">
-        <input type="text" id="pieceTitle" placeholder="Titre" required>
-        <input type="text" id="composer" placeholder="Compositeur">
-        <textarea id="notes" placeholder="Notes personnelles"></textarea>
-        <button type="submit">Ajouter</button>
-      </form>
-      <div id="piecesList"></div>
+<body class="bg-gray-900 text-white">
+  <div class="container mx-auto p-4">
+    
+    <!-- Navigation -->
+    <div class="flex justify-around bg-gray-800 p-3 fixed bottom-0 left-0 right-0">
+      <button class="tab-button" onclick="switchTab('repertoire')">🎵</button>
+      <button class="tab-button" onclick="switchTab('metronome')">🎶</button>
+      <button class="tab-button" onclick="switchTab('chrono')">⏱</button>
+      <button class="tab-button" onclick="switchTab('profil')">👤</button>
     </div>
 
-    <!-- Onglet Métronome -->
-    <div id="metronome" class="tab-content">
-      <h2>Métronome</h2>
-      <div class="metronome-container">
-        <div class="bpm-controls">
-          <button id="bpmDown">-</button>
-          <div id="bpmValue" class="bpm-display">120</div>
-          <button id="bpmUp">+</button>
+    <!-- Répertoire -->
+    <div id="repertoire" class="tab-content active p-4">
+      <h2 class="text-2xl font-bold">Répertoire</h2>
+      <form id="addPiece" class="flex flex-col space-y-3">
+        <input type="text" id="pieceTitle" placeholder="Titre" class="input">
+        <input type="text" id="composer" placeholder="Compositeur" class="input">
+        <select id="pieceType" class="input">
+          <option value="concerto">Concerto</option>
+          <option value="sonate">Sonate</option>
+          <option value="solo">Pièce solo</option>
+          <option value="technique">Technique</option>
+        </select>
+        <textarea id="notes" placeholder="Notes personnelles" class="input"></textarea>
+        <button type="submit" class="btn">Ajouter</button>
+      </form>
+      <div id="piecesList" class="mt-4"></div>
+    </div>
+
+    <!-- Métronome -->
+    <div id="metronome" class="tab-content hidden p-4">
+      <h2 class="text-2xl font-bold">Métronome</h2>
+      <div class="flex flex-col items-center">
+        <div class="flex items-center space-x-3">
+          <button id="bpmDown" class="btn">-</button>
+          <div id="bpmValue" class="text-xl">120</div>
+          <button id="bpmUp" class="btn">+</button>
         </div>
-        
-        <input type="range" id="bpmRange" 
-               min="40" max="240" value="120" 
-               class="bpm-slider">
-        
-        <div class="beat-indicator"></div>
-        
-        <button id="startStop" class="metro-button">
-          Démarrer
-        </button>
-        
-        <button id="tapTempo" class="metro-button">
-          Tap Tempo
-        </button>
+        <input type="range" id="bpmRange" min="40" max="240" value="120" class="w-full my-2">
+        <button id="startStop" class="btn">Démarrer</button>
       </div>
     </div>
-    
-    <!-- Onglet Chrono (nouveau) -->
-    <div id="chrono" class="tab-content">
-      <h2>Chrono</h2>
-      <div class="chrono-container">
-        <div id="chronoDisplay">00:00</div>
-        <button id="startChrono" class="chrono-btn">Démarrer</button>
-        <button id="stopChrono" class="chrono-btn">Arrêter</button>
-        <button id="resetChrono" class="chrono-btn">Réinitialiser</button>
+
+    <!-- Chrono -->
+    <div id="chrono" class="tab-content hidden p-4">
+      <h2 class="text-2xl font-bold">Chrono</h2>
+      <div class="flex flex-col items-center">
+        <div id="chronoDisplay" class="text-3xl">00:00</div>
+        <div class="flex space-x-2 mt-2">
+          <button id="startChrono" class="btn">Démarrer</button>
+          <button id="stopChrono" class="btn">Arrêter</button>
+          <button id="resetChrono" class="btn">Réinitialiser</button>
+        </div>
       </div>
-      <!-- Tu pourrais enregistrer l’historique des temps de pratique -->
-      <div id="chronoHistory"></div>
     </div>
-    
-  <!-- Onglet Profil amélioré -->
-<div id="profil" class="tab-content">
-    <h2>Profil</h2>
-    
-    <!-- Affichage des infos utilisateur -->
-    <div id="profileInfo">
+
+    <!-- Profil -->
+    <div id="profil" class="tab-content hidden p-4">
+      <h2 class="text-2xl font-bold">Profil</h2>
+      <div class="p-4 bg-gray-800 rounded-lg">
         <p><strong>Nom :</strong> <span id="userName">Chargement...</span></p>
         <p><strong>Email :</strong> <span id="userEmail">Chargement...</span></p>
-    </div>
-
-    <!-- Biographie modifiable -->
-    <div id="bioSection">
-        <h3>Biographie</h3>
-        <textarea id="userBio" placeholder="Écris ta biographie ici..."></textarea>
-        <button id="saveBio">Enregistrer</button>
-    </div>
-
-    <!-- Accès aux réglages -->
-    <button id="settingsBtn">⚙️ Réglages du compte</button>
-
-    <!-- Bouton Déconnexion -->
-    <button id="logout">Déconnexion</button>
-</div>
-
-    <!-- Navigation -->
-    <div class="nav-tabs">
-      <button class="tab-button active" onclick="switchTab('repertoire')">🎵 Répertoire</button>
-      <button class="tab-button" onclick="switchTab('metronome')">🎶 Métronome</button>
-      <button class="tab-button" onclick="switchTab('chrono')">⏱ Chrono</button>
-      <button class="tab-button" onclick="switchTab('profil')">👤 Profil</button>
+        <h3 class="mt-4">Biographie</h3>
+        <textarea id="userBio" class="input"></textarea>
+        <button id="saveBio" class="btn">Enregistrer</button>
+      </div>
+      <button id="logout" class="btn bg-red-500 mt-3">Déconnexion</button>
     </div>
   </div>
-  
-  <script src="app.js"></script>
+
   <script>
-    // Exemple JS pour gérer le chrono
-    let chronoInterval;
-    let seconds = 0;
-    
-    function updateChronoDisplay() {
-      const minutes = String(Math.floor(seconds / 60)).padStart(2, '0');
-      const secs = String(seconds % 60).padStart(2, '0');
-      document.getElementById("chronoDisplay").textContent = `${minutes}:${secs}`;
+    function switchTab(tab) {
+      document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+      document.getElementById(tab).classList.remove('hidden');
     }
-
-    document.getElementById("startChrono").addEventListener("click", () => {
-      if (!chronoInterval) {
-        chronoInterval = setInterval(() => {
-          seconds++;
-          updateChronoDisplay();
-        }, 1000);
-      }
-    });
-
-    document.getElementById("stopChrono").addEventListener("click", () => {
-      clearInterval(chronoInterval);
-      chronoInterval = null;
-    });
-
-    document.getElementById("resetChrono").addEventListener("click", () => {
-      seconds = 0;
-      updateChronoDisplay();
-    });
   </script>
+  
+  <style>
+    .tab-button { padding: 10px; background: none; color: white; font-size: 20px; }
+    .btn { padding: 10px 15px; background: #4f46e5; color: white; border-radius: 10px; }
+    .input { padding: 10px; width: 100%; background: #2d2d2d; color: white; border-radius: 10px; }
+  </style>
 </body>
 </html>
