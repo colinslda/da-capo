@@ -160,16 +160,67 @@ button[type="submit"]:hover {
   margin-bottom: 1rem;
 }
 
+#bioSection {
+  background: #f9f9ff;
+  border-radius: 6px;
+  padding: 1rem;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  margin-bottom: 1rem;
+}
+
+#userBio {
+  width: 100%;
+  min-height: 80px;
+  padding: 0.6rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 1rem;
+}
+
+#saveBio {
+  margin-top: 0.5rem;
+  background-color: #6e72ff;
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+#saveBio:hover {
+  background-color: #5659c9;
+}
+
+#settingsBtn {
+  background-color: #3498db;
+  color: white;
+  border: none;
+  padding: 0.7rem;
+  border-radius: 4px;
+  width: 100%;
+  margin-bottom: 1rem;
+  cursor: pointer;
+}
+
+#settingsBtn:hover {
+  background-color: #2980b9;
+}
+
 /* Bouton déconnexion */
 #logout {
   background-color: #ff6e6e;
-  color: #fff;
+  color: white;
   border: none;
+  padding: 0.7rem;
   border-radius: 4px;
-  padding: 0.7rem 1.2rem;
+  width: 100%;
   cursor: pointer;
-  transition: background 0.3s;
 }
+
+#logout:hover {
+  background-color: #e65c5c;
+}
+
 
 #logout:hover {
   background-color: #e65c5c;
