@@ -1,155 +1,166 @@
-:root {
-    --primary-color: #2c3e50;
-    --secondary-color: #3498db;
-    --background: #f5f6fa;
+/* Corps global */
+* {
+  box-sizing: border-box;
 }
 
 body {
-    margin: 0;
-    padding: 0;
-    font-family: 'Helvetica Neue', sans-serif;
-    background: var(--background);
-    height: 100vh;
+  margin: 0;
+  padding: 0;
+  font-family: 'Verdana', sans-serif;
+  background: linear-gradient(160deg, #f0f6ff, #f4f0ff);
+  color: #333;
 }
 
-.login-body {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 100vh;
-    background: linear-gradient(135deg, #2c3e50, #3498db);
-}
-
-.login-container {
-    background: white;
-    padding: 2rem;
-    border-radius: 15px;
-    box-shadow: 0 0 20px rgba(0,0,0,0.2);
-    width: 90%;
-    max-width: 400px;
-}
-
+/* Container principal */
 .container {
-    padding: 20px;
-    padding-bottom: 80px;
-    min-height: 100vh;
-    box-sizing: border-box;
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 1rem;
 }
 
-.tab-content {
-    display: none;
+/* Titres */
+h2 {
+  margin-bottom: 1rem;
+  font-weight: 600;
+  color: #4a4a4a;
 }
 
-.tab-content.active {
-    display: block;
+/* Formulaire + inputs */
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+  margin-bottom: 1.5rem;
 }
 
-.nav-tabs {
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    background: white;
-    display: flex;
-    justify-content: space-around;
-    padding: 15px 0;
-    box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
-    border-radius: 20px 20px 0 0;
+input, textarea {
+  padding: 0.6rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
 }
 
-.tab-button {
-    background: none;
-    border: none;
-    padding: 10px 20px;
-    border-radius: 25px;
-    font-size: 14px;
-    transition: all 0.3s;
+button[type="submit"] {
+  background-color: #6e72ff;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  padding: 0.7rem;
+  cursor: pointer;
+  transition: background 0.3s;
 }
 
-.tab-button.active {
-    background: var(--secondary-color);
-    color: white;
+button[type="submit"]:hover {
+  background-color: #5659c9;
 }
 
-input, textarea, button {
-    width: 100%;
-    padding: 12px;
-    margin: 8px 0;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    box-sizing: border-box;
+/* Liste des pièces */
+#piecesList {
+  margin-top: 1rem;
+  background: #fff;
+  border-radius: 6px;
+  padding: 1rem;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
 }
 
-button {
-    background: var(--secondary-color);
-    color: white;
-    border: none;
-    cursor: pointer;
-    transition: opacity 0.3s;
-}
-
-button:active {
-    opacity: 0.8;
-}
-
-.metronome-controls {
-    text-align: center;
-    margin-top: 30px;
-}
-
-#bpmRange {
-    width: 80%;
-    margin: 20px 0;
-}
-
-.bpm-display {
-    font-size: 2em;
-    margin: 20px 0;
-    color: var(--primary-color);
-}
-
-/* Nouveaux styles pour le métronome */
+/* Métronome */
 .metronome-container {
-    text-align: center;
-    padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  align-items: center;
 }
-
 .bpm-controls {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 15px;
-    margin: 20px 0;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
 }
-
-.bpm-controls button {
-    width: 40px;
-    height: 40px;
-    padding: 0;
-    border-radius: 50%;
-    font-size: 1.2em;
+.bpm-display {
+  font-size: 1.5rem;
+  width: 3rem;
+  text-align: center;
 }
-
-#bpmValue {
-    font-size: 2.5em;
-    min-width: 80px;
+.bpm-slider {
+  width: 80%;
 }
-
+.metro-button {
+  background-color: #6e72ff;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  padding: 0.7rem 1.2rem;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+.metro-button:hover {
+  background-color: #5659c9;
+}
 .beat-indicator {
-    width: 100px;
-    height: 100px;
-    background: #e74c3c;
-    border-radius: 50%;
-    margin: 20px auto;
-    transition: transform 0.1s, background 0.3s;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background-color: #ffd700; /* petit indicateur sympa */
+  margin: 0.5rem 0;
 }
 
-.beat-indicator.active {
-    transform: scale(1.2);
-    background: #2ecc71;
+/* Profil */
+#profileInfo {
+  background: #fff;
+  border-radius: 6px;
+  padding: 1rem;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  margin-bottom: 1rem;
 }
 
-#tapTempo {
-    background: #34495e;
-    margin-top: 15px;
+/* Bouton déconnexion */
+#logout {
+  background-color: #ff6e6e;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  padding: 0.7rem 1.2rem;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+#logout:hover {
+  background-color: #e65c5c;
+}
+
+/* Navigation onglets */
+.nav-tabs {
+  position: fixed;
+  bottom: 0;
+  left: 0; 
+  width: 100%;
+  display: flex;
+  justify-content: space-around;
+  background: #fff;
+  box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1);
+}
+.tab-button {
+  flex: 1;
+  padding: 0.8rem;
+  background: none;
+  border: none;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+.tab-button.active, .tab-button:hover {
+  background-color: #dcdfff;
+}
+
+/* Contenu onglets */
+.tab-content {
+  display: none;
+  animation: fadeIn 0.3s forwards;
+  margin-bottom: 4rem; /* pour que le contenu ne passe pas sous la nav */
+}
+.tab-content.active {
+  display: block;
+}
+
+/* Animation simple */
+@keyframes fadeIn {
+  from {opacity: 0;}
+  to {opacity: 1;}
 }
