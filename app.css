@@ -5,7 +5,12 @@
 
 body {
   margin: 0;
-  padding: 0;
+  /* Gère les espaces autour de l'encoche et des barres sur iPhone (ou autres appareils) */
+  padding-top: env(safe-area-inset-top);
+  padding-bottom: env(safe-area-inset-bottom);
+  padding-left: env(safe-area-inset-left);
+  padding-right: env(safe-area-inset-right);
+
   font-family: 'Verdana', sans-serif;
   background: linear-gradient(160deg, #f0f6ff, #f4f0ff);
   color: #333;
@@ -69,19 +74,23 @@ button[type="submit"]:hover {
   gap: 1rem;
   align-items: center;
 }
+
 .bpm-controls {
   display: flex;
   align-items: center;
   gap: 1rem;
 }
+
 .bpm-display {
   font-size: 1.5rem;
   width: 3rem;
   text-align: center;
 }
+
 .bpm-slider {
   width: 80%;
 }
+
 .metro-button {
   background-color: #6e72ff;
   color: #fff;
@@ -91,15 +100,55 @@ button[type="submit"]:hover {
   cursor: pointer;
   transition: background 0.3s;
 }
+
 .metro-button:hover {
   background-color: #5659c9;
 }
+
 .beat-indicator {
   width: 20px;
   height: 20px;
   border-radius: 50%;
-  background-color: #ffd700; /* petit indicateur sympa */
+  background-color: #ffd700;
   margin: 0.5rem 0;
+}
+
+/* Chrono */
+.chrono-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+}
+
+#chronoDisplay {
+  font-size: 2rem;
+  margin-bottom: 1rem;
+  font-weight: bold;
+}
+
+.chrono-btn {
+  background-color: #6e72ff;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  padding: 0.7rem 1.2rem;
+  margin: 0.3rem;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.chrono-btn:hover {
+  background-color: #5659c9;
+}
+
+/* Historique chrono */
+#chronoHistory {
+  background: #fff;
+  border-radius: 6px;
+  padding: 1rem;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  margin-top: 1rem;
 }
 
 /* Profil */
@@ -121,6 +170,7 @@ button[type="submit"]:hover {
   cursor: pointer;
   transition: background 0.3s;
 }
+
 #logout:hover {
   background-color: #e65c5c;
 }
@@ -136,6 +186,7 @@ button[type="submit"]:hover {
   background: #fff;
   box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1);
 }
+
 .tab-button {
   flex: 1;
   padding: 0.8rem;
@@ -145,7 +196,9 @@ button[type="submit"]:hover {
   cursor: pointer;
   transition: background 0.3s;
 }
-.tab-button.active, .tab-button:hover {
+
+.tab-button.active,
+.tab-button:hover {
   background-color: #dcdfff;
 }
 
@@ -153,14 +206,19 @@ button[type="submit"]:hover {
 .tab-content {
   display: none;
   animation: fadeIn 0.3s forwards;
-  margin-bottom: 4rem; /* pour que le contenu ne passe pas sous la nav */
+  margin-bottom: 4rem; /* laisse de la place pour la nav fixe */
 }
+
 .tab-content.active {
   display: block;
 }
 
 /* Animation simple */
 @keyframes fadeIn {
-  from {opacity: 0;}
-  to {opacity: 1;}
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }
