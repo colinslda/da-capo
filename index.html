@@ -7,17 +7,17 @@
   <link rel="manifest" href="manifest.json">
   <link rel="stylesheet" href="styles.css">
   <!-- Import de la bibliothèque SupaBase -->
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js/dist/supabase.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@1.35.7/dist/supabase.min.js" type="text/javascript"></script>
 </head>
 <body>
   <div class="auth-container">
     <h1>DA CAPO</h1>
     <form id="auth-form">
-  <input type="email" id="email" placeholder="Email" required>
-  <input type="password" id="password" placeholder="Mot de passe" required>
-  <button type="submit">Se connecter</button>
-  <button type="button" onclick="window.location.href='signup.html'">Nouveau compte</button>
-</form>
+      <input type="email" id="email" placeholder="Email" required>
+      <input type="password" id="password" placeholder="Mot de passe" required>
+      <button type="submit">Se connecter</button>
+      <button type="button" onclick="window.location.href='signup.html'">Nouveau compte</button>
+    </form>
     <p id="error-message"></p>
   </div>
 
