@@ -39,6 +39,22 @@ async function loadUserData(user) {
     document.getElementById("userName").textContent = user.displayName || "Nom inconnu";
     document.getElementById("userEmail").textContent = user.email;
 
+    // Attempt to split displayName into first and last name
+    if (user.displayName) {
+        const nameParts = user.displayName.split(' ');
+        const firstName = nameParts[0] || 'Non défini'; // First part as first name
+        const lastName = nameParts.length > 1 ? nameParts.slice(1).join(' ') : 'Non défini'; // Rest as last name
+
+        document.getElementById("userFirstName").textContent = firstName;
+        document.getElementById("userLastName").textContent = lastName;
+    } else {
+        document.getElementById("userFirstName").textContent = 'Non défini';
+        document.getElementById("userLastName").textContent = 'Non défini';
+    }
+
+    // Date de naissance - non disponible directement dans Firebase Auth standard
+    document.getElementById("userBirthDate").textContent = 'Non défini'; // Or retrieve from your database if you store it
+
     // La partie concernant la bio Supabase est commentée car elle n'est plus pertinente avec Firebase Auth directement.
     // Si vous souhaitez gérer la bio des utilisateurs avec Firebase, il faudra adapter cette partie (ex: Firestore).
 
