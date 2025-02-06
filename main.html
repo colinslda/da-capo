@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <title>DACAPO</title>
-  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="style.css"> <script src="https://cdn.tailwindcss.com"></script>
   <script type="module" src="app.js"></script>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="manifest" href="/manifest.json">
@@ -167,6 +167,14 @@
     #piecesList .piece-card {
       @apply bg-white p-6 rounded-2xl shadow-md border-2 border-gray-200 hover:border-purple-300
              transition-all transform hover:-translate-y-1 cursor-pointer;
+    }
+
+    .tab-content.hidden {
+        @apply hidden;
+    }
+
+    .tab-content.active {
+        @apply block;
     }
 
     .tab-button.active {
