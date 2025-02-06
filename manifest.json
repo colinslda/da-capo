@@ -1,7 +1,7 @@
 {
   "name": "DACAPO",
   "short_name": "DACAPO",
-  "start_url": "/",
+  "start_url": "/on.html",
   "display": "standalone",
   "background_color": "#9A80E8",
   "theme_color": "#6E72FF",
