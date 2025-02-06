@@ -45,15 +45,31 @@ async function loadUserData(user) {
         const firstName = nameParts[0] || 'Non défini'; // First part as first name
         const lastName = nameParts.length > 1 ? nameParts.slice(1).join(' ') : 'Non défini'; // Rest as last name
 
+        document.getElementById("userName").textContent = user.displayName || "Nom inconnu";
+    console.log("Element userName récupéré :", document.getElementById("userName")); // Ajout de ce log
+    document.getElementById("userEmail").textContent = user.email;
+    console.log("Element userEmail récupéré :", document.getElementById("userEmail")); // Ajout de ce log
+
+    // Attempt to split displayName into first and last name
+    if (user.displayName) {
+        const nameParts = user.displayName.split(' ');
+        const firstName = nameParts[0] || 'Non défini'; // First part as first name
+        const lastName = nameParts.length > 1 ? nameParts.slice(1).join(' ') : 'Non défini'; // Rest as last name
+
         document.getElementById("userFirstName").textContent = firstName;
+        console.log("Element userFirstName récupéré :", document.getElementById("userFirstName")); // Ajout de ce log
         document.getElementById("userLastName").textContent = lastName;
+        console.log("Element userLastName récupéré :", document.getElementById("userLastName")); // Ajout de ce log
     } else {
         document.getElementById("userFirstName").textContent = 'Non défini';
+        console.log("Element userFirstName (else) récupéré :", document.getElementById("userFirstName")); // Ajout de ce log
         document.getElementById("userLastName").textContent = 'Non défini';
+        console.log("Element userLastName (else) récupéré :", document.getElementById("userLastName")); // Ajout de ce log
     }
 
     // Date de naissance - non disponible directement dans Firebase Auth standard
     document.getElementById("userBirthDate").textContent = 'Non défini'; // Or retrieve from your database if you store it
+    console.log("Element userBirthDate récupéré :", document.getElementById("userBirthDate")); // Ajout de ce log
 
     // La partie concernant la bio Supabase est commentée car elle n'est plus pertinente avec Firebase Auth directement.
     // Si vous souhaitez gérer la bio des utilisateurs avec Firebase, il faudra adapter cette partie (ex: Firestore).
