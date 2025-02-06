@@ -140,16 +140,24 @@ function createPieceElement(id, data) {
     return pieceCard;
 }
 
-// Vérifier la session et charger les infos de l'utilisateur
 function checkUserSession() {
     onAuthStateChanged(auth, async (user) => {
         if (user) {
             console.log("Utilisateur connecté :", user);
             await loadUserData(user);
-            loadPiecesList(); // Charger la liste des pièces après la connexion
+            loadPiecesList();
         } else {
-            console.log("Aucune session trouvée, redirection vers la connexion.");
-            window.location.href = "/login.html";
+            console.log("Utilisateur non détecté immédiatement, nouvelle tentative dans 500ms...");
+            setTimeout(() => {
+                if (auth.currentUser) {
+                    console.log("Utilisateur détecté après délai :", auth.currentUser);
+                    loadUserData(auth.currentUser);
+                    loadPiecesList();
+                } else {
+                    console.log("Aucune session trouvée, redirection vers la connexion.");
+                    window.location.href = "/login.html";
+                }
+            }, 500);
         }
     });
 }
