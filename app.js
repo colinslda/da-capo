@@ -102,7 +102,6 @@ async function loadPiecesList() {
     }
 }
 
-
 // Fonction pour créer un élément HTML pour afficher une pièce
 function createPieceElement(id, data) {
     const pieceCard = document.createElement('div');
@@ -138,10 +137,8 @@ function createPieceElement(id, data) {
         }
     });
 
-
     return pieceCard;
 }
-
 
 // Vérifier la session et charger les infos de l'utilisateur
 function checkUserSession() {
@@ -203,23 +200,206 @@ document.getElementById("logout")?.addEventListener("click", async () => {
 // Vérifier la session au chargement de l'application (inchangé)
 checkUserSession();
 
-// ⏱ MINUTEUR ⏱ (inchangé)
+// ⏱ MINUTEUR ⏱
 let timerInterval;
-// ... (fonctions minuteur inchangées) ...
+let timeLeft = 0; // Temps restant en secondes, initialisé à 0
 
-// 🎵 MÉTRONOME 🎵 (inchangé)
-class Metronome {
-   // ... (classe Metronome inchangée) ...
+function startTimer() {
+    let minutes = parseInt(document.getElementById('minutesInput').value, 10) || 0;
+    let seconds = parseInt(document.getElementById('secondsInput').value, 10) || 0;
+
+    // S'assurer que les valeurs sont bien des nombres et dans les limites
+    minutes = isNaN(minutes) ? 0 : Math.max(0, Math.min(minutes, 59));
+    seconds = isNaN(seconds) ? 0 : Math.max(0, Math.min(seconds, 59));
+
+    timeLeft = minutes * 60 + seconds;
+
+    if (timeLeft <= 0) {
+        alert("Veuillez entrer une durée valide (supérieure à 0).");
+        return;
+    }
+
+    // Désactiver les inputs pendant le compte à rebours
+    document.getElementById('minutesInput').disabled = true;
+    document.getElementById('secondsInput').disabled = true;
+
+
+    timerInterval = setInterval(updateTimer, 1000);
+    updateDisplay(); // Mise à jour immédiate de l'affichage
 }
-let metronome = null;
-document.addEventListener('DOMContentLoaded', () => {
-   // ... (initialisation métronome inchangée) ...
+
+function updateTimer() {
+    if (timeLeft <= 0) {
+        clearInterval(timerInterval);
+        timeLeft = 0; // Pour éviter les valeurs négatives
+        updateDisplay(); // Mise à jour finale à 00:00
+        alert("Temps écoulé !"); // Alerte à la fin du minuteur
+
+        // Réactiver les inputs à la fin du compte à rebours
+        document.getElementById('minutesInput').disabled = false;
+        document.getElementById('secondsInput').disabled = false;
+
+
+    } else {
+        timeLeft--;
+        updateDisplay();
+    }
+}
+
+function stopTimer() {
+    clearInterval(timerInterval);
+    // Réactiver les inputs quand on arrête le minuteur
+    document.getElementById('minutesInput').disabled = false;
+    document.getElementById('secondsInput').disabled = false;
+}
+
+function resetTimer() {
+    stopTimer();
+    document.getElementById('minutesInput').value = '00';
+    document.getElementById('secondsInput').value = '00';
+    timeLeft = 0; // Réinitialise le temps restant
+    updateDisplay();
+    // Réactiver les inputs après réinitialisation
+    document.getElementById('minutesInput').disabled = false;
+    document.getElementById('secondsInput').disabled = false;
+}
+
+function updateDisplay() {
+    const minutes = Math.floor(timeLeft / 60);
+    const seconds = timeLeft % 60;
+    document.getElementById('chronoDisplay').textContent = `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+}
+
+document.addEventListener('DOMContentLoaded', () => { // Assurer que le DOM est chargé
+    document.getElementById('startChrono')?.addEventListener('click', startTimer);
+    document.getElementById('stopChrono')?.addEventListener('click', stopTimer);
+    document.getElementById('resetChrono')?.addEventListener('click', resetTimer);
 });
 
 
+// 🎵 MÉTRONOME 🎵
+class Metronome {
+    constructor() {
+        this.isPlaying = false;
+        this.bpm = 120;
+        this.timer = null;
+        this.tapTimes = [];
+        this.audioContext = null;
+        this.gainNode = null;
+
+        this.initAudio();
+        this.initControls();
+    }
+
+    initAudio() {
+        this.audioContext = new (window.AudioContext || window.webkitAudioContext)();
+        this.gainNode = this.audioContext.createGain();
+        this.gainNode.connect(this.audioContext.destination);
+    }
+
+    initControls() {
+        document.getElementById('bpmRange')?.addEventListener('input', (e) => {
+            this.bpm = parseInt(e.target.value);
+            this.updateDisplay();
+            if (this.isPlaying) this.restart();
+        });
+
+        document.getElementById('bpmUp')?.addEventListener('click', () => {
+            this.bpm = Math.min(240, this.bpm + 1);
+            this.updateDisplay();
+            if (this.isPlaying) this.restart();
+        });
+
+        document.getElementById('bpmDown')?.addEventListener('click', () => {
+            this.bpm = Math.max(40, this.bpm - 1);
+            this.updateDisplay();
+            if (this.isPlaying) this.restart();
+        });
+
+        document.getElementById('startStop')?.addEventListener('click', () => {
+            this.isPlaying ? this.stop() : this.start();
+        });
+
+        document.getElementById('tapTempo')?.addEventListener('click', () => {
+            this.handleTapTempo();
+        });
+    }
+
+    updateDisplay() {
+        document.getElementById('bpmValue').textContent = this.bpm;
+        document.getElementById('bpmRange').value = this.bpm;
+        document.getElementById('tempoPercent').textContent = Math.round(((this.bpm - 40) / (240 - 40)) * 100) + '%'; // Pourcentage
+    }
+
+
+    playClick() {
+        const osc = this.audioContext.createOscillator();
+        osc.connect(this.gainNode);
+        osc.frequency.value = 1000;
+
+        const now = this.audioContext.currentTime;
+        osc.start(now);
+        osc.stop(now + 0.1);
+
+        const indicator = document.querySelector('.beat-indicator');
+        indicator.classList.add('active');
+        setTimeout(() => indicator.classList.remove('active'), 100);
+    }
+
+    start() {
+        this.isPlaying = true;
+        document.getElementById('startStop').textContent = 'Arrêter';
+        this.audioContext.resume();
+        this.scheduleClick();
+    }
+
+    stop() {
+        this.isPlaying = false;
+        document.getElementById('startStop').textContent = 'Démarrer';
+        clearTimeout(this.timer);
+    }
+
+    restart() {
+        this.stop();
+        this.start();
+    }
+
+    scheduleClick() {
+        if (!this.isPlaying) return;
+        this.playClick();
+        this.timer = setTimeout(() => this.scheduleClick(), 60000 / this.bpm);
+    }
+
+    handleTapTempo() {
+        const now = Date.now();
+        this.tapTimes.push(now);
+
+        if (this.tapTimes.length > 2) {
+            const times = this.tapTimes.slice(-3);
+            const average = (times[2] - times[0]) / 2;
+            this.bpm = Math.round(60000 / average);
+            this.bpm = Math.min(240, Math.max(40, this.bpm));
+            this.updateDisplay();
+            if (this.isPlaying) this.restart();
+        }
+    }
+}
+
+// Initialisation du métronome
+let metronome = null;
+document.addEventListener('DOMContentLoaded', () => {
+    if (document.getElementById('bpmValue')) {
+        metronome = new Metronome();
+    }
+});
+
 // Navigation entre les onglets (inchangé)
 function switchTab(tabId) {
-   // ... (fonction switchTab inchangée) ...
+    document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
+    document.querySelectorAll('.tab-button').forEach(btn => btn.classList.remove('active'));
+
+    document.getElementById(tabId)?.classList.add('active');
+    document.querySelector(`.tab-button[onclick="switchTab('${tabId}')"]`).classList.add('active');
 }
 
 // 🔹 Service Worker pour le PWA (inchangé)
