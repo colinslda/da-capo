@@ -1,6 +1,7 @@
 // Import Firebase modules
 import { initializeApp } from "https://www.gstatic.com/firebasejs/11.2.0/firebase-app.js";
 import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/11.2.0/firebase-auth.js";
+import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/11.2.0/firebase-firestore.js"; // Import Firestore
 
 // Firebase configuration
 const firebaseConfig = {
@@ -16,14 +17,15 @@ const firebaseConfig = {
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
+const db = getFirestore(app); // Initialize Firestore
 
 // Vérifier la session et charger les infos de l'utilisateur
 function checkUserSession() {
-    onAuthStateChanged(auth, (user) => { // Ajout de 'auth' ici
+    onAuthStateChanged(auth, async (user) => { // Ajout de 'auth' ici et fonction asynchrone
         if (user) {
             // Utilisateur connecté
             console.log("Utilisateur connecté :", user);
-            loadUserData(user);
+            await loadUserData(user); // Attendre que loadUserData se termine
         } else {
             // Utilisateur non connecté
             console.log("Aucune session trouvée, redirection vers la connexion.");
@@ -36,59 +38,26 @@ function checkUserSession() {
 async function loadUserData(user) {
     if (!user) return;
 
-    document.getElementById("userName").textContent = user.displayName || "Nom inconnu";
     document.getElementById("userEmail").textContent = user.email;
 
-    // Attempt to split displayName into first and last name
-    if (user.displayName) {
-        const nameParts = user.displayName.split(' ');
-        const firstName = nameParts[0] || 'Non défini'; // First part as first name
-        const lastName = nameParts.length > 1 ? nameParts.slice(1).join(' ') : 'Non défini'; // Rest as last name
+    try {
+        const userDoc = await getDoc(doc(db, "users", user.uid)); // Récupérer le document Firestore
+        if (userDoc.exists()) {
+            const userData = userDoc.data();
+            document.getElementById("userFirstName").textContent = userData.firstName || "Prénom inconnu"; // Afficher le prénom
+            document.getElementById("userLastName").textContent = userData.lastName || "Nom inconnu";     // Afficher le nom
+            // document.getElementById("userName").textContent = user.displayName || "Nom inconnu"; // Cette ligne n'est plus nécessaire car on utilise Prénom et Nom séparément
+        } else {
+            console.log("Document utilisateur non trouvé dans Firestore");
+            document.getElementById("userFirstName").textContent = "Prénom inconnu";
+            document.getElementById("userLastName").textContent = "Nom inconnu";
+        }
 
-        document.getElementById("userName").textContent = user.displayName || "Nom inconnu";
-    console.log("Element userName récupéré :", document.getElementById("userName")); // Ajout de ce log
-    document.getElementById("userEmail").textContent = user.email;
-    console.log("Element userEmail récupéré :", document.getElementById("userEmail")); // Ajout de ce log
-
-    // Attempt to split displayName into first and last name
-    if (user.displayName) {
-        const nameParts = user.displayName.split(' ');
-        const firstName = nameParts[0] || 'Non défini'; // First part as first name
-        const lastName = nameParts.length > 1 ? nameParts.slice(1).join(' ') : 'Non défini'; // Rest as last name
-
-        document.getElementById("userFirstName").textContent = firstName;
-        console.log("Element userFirstName récupéré :", document.getElementById("userFirstName")); // Ajout de ce log
-        document.getElementById("userLastName").textContent = lastName;
-        console.log("Element userLastName récupéré :", document.getElementById("userLastName")); // Ajout de ce log
-    } else {
-        document.getElementById("userFirstName").textContent = 'Non défini';
-        console.log("Element userFirstName (else) récupéré :", document.getElementById("userFirstName")); // Ajout de ce log
-        document.getElementById("userLastName").textContent = 'Non défini';
-        console.log("Element userLastName (else) récupéré :", document.getElementById("userLastName")); // Ajout de ce log
+    } catch (err) {
+        console.error("Erreur lors du chargement des données utilisateur depuis Firestore :", err);
+        document.getElementById("userFirstName").textContent = "Prénom inconnu";
+        document.getElementById("userLastName").textContent = "Nom inconnu";
     }
-
-    // Date de naissance - non disponible directement dans Firebase Auth standard
-    document.getElementById("userBirthDate").textContent = 'Non défini'; // Or retrieve from your database if you store it
-    console.log("Element userBirthDate récupéré :", document.getElementById("userBirthDate")); // Ajout de ce log
-
-    // La partie concernant la bio Supabase est commentée car elle n'est plus pertinente avec Firebase Auth directement.
-    // Si vous souhaitez gérer la bio des utilisateurs avec Firebase, il faudra adapter cette partie (ex: Firestore).
-
-    // try {
-    //     const { data, error } = await supabase
-    //         .from("users")
-    //         .select("bio")
-    //         .eq("id", user.id)
-    //         .single();
-
-    //     if (error) throw error;
-
-    //     if (data && data.bio) {
-    //         document.getElementById("userBio").value = data.bio;
-    //     }
-    // } catch (err) {
-    //     console.error("Erreur lors du chargement de la bio :", err);
-    // }
 }
 
 // Sauvegarder la biographie (COMMENTÉ - à adapter si nécessaire pour Firebase)
