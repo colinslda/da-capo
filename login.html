@@ -4,8 +4,71 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, viewport-fit=cover" />
   <title>DA CAPO - Connexion</title>
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <!-- Import de la police "Playfair Display" -->
+
+  <script type="module">
+    // Import Firebase modules
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.2.0/firebase-app.js";
+    import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/11.2.0/firebase-auth.js";
+
+    // Firebase configuration
+    const firebaseConfig = {
+      apiKey: "AIzaSyDJFjq6AA-30mrI5Yagpy0n11fk6Wceo0k",
+      authDomain: "dacapo-4e852.firebaseapp.com",
+      projectId: "dacapo-4e852",
+      storageBucket: "dacapo-4e852.firebasestorage.app",
+      messagingSenderId: "68504525719",
+      appId: "1:68504525719:web:65794607064db1fff9c2d2",
+      measurementId: "G-58VM0TCQ1M"
+    };
+
+    // Initialize Firebase
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+
+    document.addEventListener('DOMContentLoaded', () => {
+      // Connexion avec Firebase
+      document.getElementById('login-form').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const email = document.getElementById('email').value;
+        const password = document.getElementById('password').value;
+
+        try {
+          const userCredential = await signInWithEmailAndPassword(auth, email, password);
+          // Connexion réussie
+          window.location.href = 'main.html';
+        } catch (error) {
+          let errorMessage = "Erreur de connexion.";
+          if (error.code === 'auth/user-not-found') {
+            errorMessage = "Utilisateur non trouvé.";
+          } else if (error.code === 'auth/wrong-password') {
+            errorMessage = "Mot de passe incorrect.";
+          } else if (error.code === 'auth/invalid-email') {
+            errorMessage = "Adresse email invalide.";
+          }
+          alert('Erreur : ' + errorMessage);
+          console.error("Erreur Firebase:", error);
+        }
+      });
+
+      // Mot de passe oublié
+      document.getElementById('forgot-password').addEventListener('click', () => {
+        window.location.href = 'password.html'; // Assurez-vous que ce fichier existe ou adaptez
+      });
+
+      // Inscription
+      document.getElementById('signup-button').addEventListener('click', () => {
+        window.location.href = 'signup.html'; // Assurez-vous que ce fichier existe ou adaptez
+      });
+
+      // Besoin d'aide ?
+      document.getElementById('help-button').addEventListener('click', () => {
+        window.location.href = 'contact.html'; // Assurez-vous que ce fichier existe ou adaptez
+      });
+    });
+
+
+  </script>
+
   <link
     href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&display=swap"
     rel="stylesheet"
@@ -103,45 +166,5 @@
     <button id="signup-button">Pas de compte ? Créez-en un !</button>
     <button id="help-button">Besoin d'aide ? Contacte-nous !</button>
   </div>
-
-  <script>
-    const SUPABASE_URL = 'https://efnhqqgddfuxwmnrguns.supabase.co';
-    const SUPABASE_ANON_KEY =
-      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVmbmhxcWdkZGZ1eHdtbnJndW5zIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Mzg1ODYyMzUsImV4cCI6MjA1NDE2MjIzNX0.XdVYATptiop5yAUtvPZCWxPo-gcKwYuflvsjvkqEG-w';
-    const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-
-    // Connexion
-    document.getElementById('login-form').addEventListener('submit', async (e) => {
-      e.preventDefault();
-      const email = document.getElementById('email').value;
-      const password = document.getElementById('password').value;
-
-      const { data, error } = await supabaseClient.auth.signInWithPassword({
-        email, 
-        password
-      });
-
-      if (error) {
-        alert('Erreur : ' + error.message);
-      } else {
-        window.location.href = 'main.html';
-      }
-    });
-
-    // Mot de passe oublié
-    document.getElementById('forgot-password').addEventListener('click', () => {
-      window.location.href = 'password.html';
-    });
-
-    // Inscription
-    document.getElementById('signup-button').addEventListener('click', () => {
-      window.location.href = 'signup.html';
-    });
-
-    // Besoin d'aide ?
-    document.getElementById('help-button').addEventListener('click', () => {
-      window.location.href = 'contact.html';
-    });
-  </script>
 </body>
 </html>
