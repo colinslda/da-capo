@@ -101,17 +101,27 @@ checkUserSession();
 
 // ⏱ MINUTEUR ⏱
 let timerInterval;
-let timeLeft; // Temps restant en secondes
+let timeLeft = 0; // Temps restant en secondes, initialisé à 0
 
 function startTimer() {
-    const minutes = parseInt(document.getElementById('minutesInput').value, 10) || 0;
-    const seconds = parseInt(document.getElementById('secondsInput').value, 10) || 0;
+    let minutes = parseInt(document.getElementById('minutesInput').value, 10) || 0;
+    let seconds = parseInt(document.getElementById('secondsInput').value, 10) || 0;
+
+    // S'assurer que les valeurs sont bien des nombres et dans les limites
+    minutes = isNaN(minutes) ? 0 : Math.max(0, Math.min(minutes, 59));
+    seconds = isNaN(seconds) ? 0 : Math.max(0, Math.min(seconds, 59));
+
     timeLeft = minutes * 60 + seconds;
 
     if (timeLeft <= 0) {
-        alert("Veuillez entrer une durée valide.");
+        alert("Veuillez entrer une durée valide (supérieure à 0).");
         return;
     }
+
+    // Désactiver les inputs pendant le compte à rebours
+    document.getElementById('minutesInput').disabled = true;
+    document.getElementById('secondsInput').disabled = true;
+
 
     timerInterval = setInterval(updateTimer, 1000);
     updateDisplay(); // Mise à jour immédiate de l'affichage
@@ -121,15 +131,25 @@ function updateTimer() {
     if (timeLeft <= 0) {
         clearInterval(timerInterval);
         timeLeft = 0; // Pour éviter les valeurs négatives
-        alert("Temps écoulé !"); // Optionnel: Jouer un son, changer l'affichage, etc.
+        updateDisplay(); // Mise à jour finale à 00:00
+        alert("Temps écoulé !"); // Alerte à la fin du minuteur
+
+        // Réactiver les inputs à la fin du compte à rebours
+        document.getElementById('minutesInput').disabled = false;
+        document.getElementById('secondsInput').disabled = false;
+
+
     } else {
         timeLeft--;
+        updateDisplay();
     }
-    updateDisplay();
 }
 
 function stopTimer() {
     clearInterval(timerInterval);
+    // Réactiver les inputs quand on arrête le minuteur
+    document.getElementById('minutesInput').disabled = false;
+    document.getElementById('secondsInput').disabled = false;
 }
 
 function resetTimer() {
@@ -138,6 +158,9 @@ function resetTimer() {
     document.getElementById('secondsInput').value = '00';
     timeLeft = 0; // Réinitialise le temps restant
     updateDisplay();
+    // Réactiver les inputs après réinitialisation
+    document.getElementById('minutesInput').disabled = false;
+    document.getElementById('secondsInput').disabled = false;
 }
 
 function updateDisplay() {
@@ -146,12 +169,14 @@ function updateDisplay() {
     document.getElementById('chronoDisplay').textContent = `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
 }
 
+document.addEventListener('DOMContentLoaded', () => { // Assurer que le DOM est chargé
+    document.getElementById('startChrono')?.addEventListener('click', startTimer);
+    document.getElementById('stopChrono')?.addEventListener('click', stopTimer);
+    document.getElementById('resetChrono')?.addEventListener('click', resetTimer);
+});
 
-document.getElementById('startChrono')?.addEventListener('click', startTimer);
-document.getElementById('stopChrono')?.addEventListener('click', stopTimer);
-document.getElementById('resetChrono')?.addEventListener('click', resetTimer);
 
-// 🎵 MÉTRONOME 🎵 (Le reste de votre code métronome reste inchangé, il n'est pas lié à l'authentification)
+// 🎵 MÉTRONOME 🎵
 class Metronome {
     constructor() {
         this.isPlaying = false;
@@ -267,16 +292,16 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 });
 
-// Navigation entre les onglets
+// Navigation entre les onglets (inchangé)
 function switchTab(tabId) {
     document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
     document.querySelectorAll('.tab-button').forEach(btn => btn.classList.remove('active'));
 
     document.getElementById(tabId)?.classList.add('active');
-    event.target.classList.add('active');
+    document.querySelector(`.tab-button[onclick="switchTab('${tabId}')"]`).classList.add('active');
 }
 
-// 🔹 Service Worker pour le PWA
+// 🔹 Service Worker pour le PWA (inchangé)
 if ('serviceWorker' in navigator) {
     window.addEventListener('load', () => {
         navigator.serviceWorker.register('service-worker.js');
