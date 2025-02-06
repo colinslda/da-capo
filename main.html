@@ -56,9 +56,9 @@
           <input type="range" id="bpmRange" min="40" max="240" value="120"
                  class="w-full h-2 bg-blue-100 rounded-full appearance-none cursor-pointer accent-blue-500">
           <div class="flex gap-4">
-            <button id="bpmDown" class="btn-circle bg-blue-100 text-blue-600">-</button>
+            <button id="bpmDown" class="btn-circle bg-blue-100 text-blue-600" style="font-size: 1.5em;">-</button>
             <button id="startStop" class="btn-primary px-8 py-4 text-lg">▶ Démarrer</button>
-            <button id="bpmUp" class="btn-circle bg-blue-100 text-blue-600">+</button>
+            <button id="bpmUp" class="btn-circle bg-blue-100 text-blue-600" style="font-size: 1.5em;">+</button>
           </div>
           <div class="beat-indicator"></div>
         </div>
@@ -162,6 +162,9 @@
     .btn-circle {
       @apply w-12 h-12 flex items-center justify-center rounded-full text-xl
              transition-all hover:scale-110 active:scale-95;
+      width: 48px; /* Augmente la largeur */
+      height: 48px; /* Augmente la hauteur */
+      font-size: 2em; /* Optionnel: Augmente la taille de la police pour les symboles + et - */
     }
 
     #piecesList .piece-card {
