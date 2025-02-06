@@ -1,3 +1,5 @@
+/* style.css */
+
 /* Corps global */
 * {
   box-sizing: border-box;
@@ -230,7 +232,7 @@ button[type="submit"]:hover {
 .nav-tabs {
   position: fixed;
   bottom: 0;
-  left: 0; 
+  left: 0;
   width: 100%;
   display: flex;
   justify-content: space-around;
@@ -255,13 +257,13 @@ button[type="submit"]:hover {
 
 /* Contenu onglets */
 .tab-content {
-  display: none;
+  display: none; /* Cette ligne est importante pour cacher initialement les onglets (sauf l'actif par défaut) */
   animation: fadeIn 0.3s forwards;
   margin-bottom: 4rem; /* laisse de la place pour la nav fixe */
 }
 
 .tab-content.active {
-  display: block;
+  display: block; /*  Cette ligne est importante pour afficher l'onglet actif */
 }
 
 /* Animation simple */
