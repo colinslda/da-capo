@@ -5,32 +5,30 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <title>DACAPO</title>
   <script src="https://cdn.tailwindcss.com"></script>
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script type="module" src="app.js"></script>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="manifest" href="/manifest.json">
 </head>
 <body class="bg-gradient-to-br from-gray-50 to-purple-50 min-h-screen font-['Inter']">
   <div class="container mx-auto px-4 pb-20">
-    
-    <!-- Navigation pastel -->
+
     <nav class="fixed bottom-4 left-1/2 -translate-x-1/2 bg-white/80 backdrop-blur-lg rounded-full p-2 shadow-lg border border-gray-200">
       <div class="flex gap-4">
-        <button onclick="switchTab('repertoire')" class="w-12 h-12 flex items-center justify-center rounded-full hover:bg-purple-50 transition-all">
+        <button onclick="switchTab('repertoire')" class="tab-button w-12 h-12 flex items-center justify-center rounded-full hover:bg-purple-50 transition-all active">
           <span class="text-2xl text-purple-600">🎵</span>
         </button>
-        <button onclick="switchTab('metronome')" class="w-12 h-12 flex items-center justify-center rounded-full hover:bg-blue-50 transition-all">
+        <button onclick="switchTab('metronome')" class="tab-button w-12 h-12 flex items-center justify-center rounded-full hover:bg-blue-50 transition-all">
           <span class="text-2xl text-blue-600">🎶</span>
         </button>
-        <button onclick="switchTab('chrono')" class="w-12 h-12 flex items-center justify-center rounded-full hover:bg-green-50 transition-all">
+        <button onclick="switchTab('chrono')" class="tab-button w-12 h-12 flex items-center justify-center rounded-full hover:bg-green-50 transition-all">
           <span class="text-2xl text-green-600">⏱</span>
         </button>
-        <button onclick="switchTab('profil')" class="w-12 h-12 flex items-center justify-center rounded-full hover:bg-pink-50 transition-all">
+        <button onclick="switchTab('profil')" class="tab-button w-12 h-12 flex items-center justify-center rounded-full hover:bg-pink-50 transition-all">
           <span class="text-2xl text-pink-600">👤</span>
         </button>
       </div>
     </nav>
 
-    <!-- Répertoire - Style carte colorée -->
     <div id="repertoire" class="tab-content active">
       <h2 class="text-3xl font-bold mb-6 text-purple-600">Répertoire</h2>
       <form id="addPiece" class="mb-8 bg-white p-6 rounded-2xl shadow-md border border-purple-50">
@@ -50,31 +48,37 @@
       <div id="piecesList" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"></div>
     </div>
 
-    <!-- Métronome - Style aéré -->
     <div id="metronome" class="tab-content hidden">
       <div class="max-w-md mx-auto bg-white p-8 rounded-2xl shadow-md border border-blue-50">
         <h2 class="text-2xl font-bold mb-6 text-center text-blue-600">Métronome</h2>
         <div class="flex flex-col items-center space-y-6">
           <div class="text-5xl font-bold text-blue-600" id="bpmValue">120</div>
-          <input type="range" id="bpmRange" min="40" max="240" value="120" 
+          <input type="range" id="bpmRange" min="40" max="240" value="120"
                  class="w-full h-2 bg-blue-100 rounded-full appearance-none cursor-pointer accent-blue-500">
           <div class="flex gap-4">
             <button id="bpmDown" class="btn-circle bg-blue-100 text-blue-600">-</button>
             <button id="startStop" class="btn-primary px-8 py-4 text-lg">▶ Démarrer</button>
             <button id="bpmUp" class="btn-circle bg-blue-100 text-blue-600">+</button>
           </div>
+          <div class="beat-indicator"></div>
         </div>
       </div>
     </div>
 
-<div id="chrono" class="tab-content hidden">
+    <div id="chrono" class="tab-content hidden">
       <div class="max-w-sm mx-auto bg-white p-8 rounded-2xl shadow-md border border-green-50">
         <h2 class="text-2xl font-bold mb-6 text-center text-green-600">Minuteur</h2>
         <div class="flex flex-col items-center space-y-6">
           <div class="flex space-x-2 mb-4">
-            <input type="number" id="minutesInput" placeholder="Minutes" min="0" max="59" value="00" class="timer-input" />
+            <div class="flex flex-col items-center">
+              <input type="number" id="minutesInput" placeholder="MM" min="0" max="59" value="00" class="timer-input" />
+              <label for="minutesInput" class="text-sm text-gray-500">Minutes</label>
+            </div>
             <span class="text-4xl">:</span>
-            <input type="number" id="secondsInput" placeholder="Secondes" min="0" max="59" value="00" class="timer-input" />
+            <div class="flex flex-col items-center">
+              <input type="number" id="secondsInput" placeholder="SS" min="0" max="59" value="00" class="timer-input" />
+              <label for="secondsInput" class="text-sm text-gray-500">Secondes</label>
+            </div>
           </div>
           <div class="text-4xl font-mono bg-green-100 px-6 py-3 rounded-lg text-green-700" id="chronoDisplay">00:00</div>
           <div class="flex gap-3 flex-wrap justify-center">
@@ -86,7 +90,6 @@
       </div>
     </div>
 
-    <!-- Profil - Style carte légère -->
     <div id="profil" class="tab-content hidden">
       <div class="max-w-2xl mx-auto">
         <div class="bg-white p-6 rounded-2xl shadow-md border border-pink-50">
@@ -113,46 +116,61 @@
   </div>
 
   <script>
-    function switchTab(tab) {
-      document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
-      document.getElementById(tab).classList.remove('hidden');
+    function switchTab(tabId) {
+      document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
+      document.querySelectorAll('.tab-button').forEach(btn => btn.classList.remove('active'));
+
+      document.getElementById(tabId)?.classList.add('active');
+      document.querySelector(`.tab-button[onclick="switchTab('${tabId}')"]`).classList.add('active');
     }
+     document.addEventListener('DOMContentLoaded', () => {
+        switchTab('repertoire'); // Sélectionne 'repertoire' par défaut au chargement
+    });
   </script>
-  
+
   <style>
     .input-light {
-      @apply w-full px-4 py-3 bg-white border-2 border-gray-200 rounded-xl text-gray-700 placeholder-gray-400 
+      @apply w-full px-4 py-3 bg-white border-2 border-gray-200 rounded-xl text-gray-700 placeholder-gray-400
              focus:outline-none focus:border-purple-300 focus:ring-2 focus:ring-purple-100 transition-all;
     }
 
+    .timer-input {
+      @apply w-24 px-4 py-3 bg-white border-2 border-gray-200 rounded-xl text-center text-gray-700 placeholder-gray-400
+             focus:outline-none focus:border-green-300 focus:ring-2 focus:ring-green-100 transition-all;
+    }
+
     .btn-primary {
-      @apply bg-gradient-to-r from-purple-500 to-blue-500 text-white font-semibold rounded-xl px-6 py-3 
+      @apply bg-gradient-to-r from-purple-500 to-blue-500 text-white font-semibold rounded-xl px-6 py-3
              hover:opacity-90 transition-all transform hover:scale-[1.02] active:scale-95 shadow-md;
     }
 
     .btn-danger {
-      @apply bg-red-400 text-white font-semibold rounded-xl px-6 py-3 
+      @apply bg-red-400 text-white font-semibold rounded-xl px-6 py-3
              hover:bg-red-500 transition-all transform hover:scale-[1.02] active:scale-95;
     }
 
     .btn-success {
-      @apply bg-green-500 text-white font-semibold rounded-xl px-6 py-3 
+      @apply bg-green-500 text-white font-semibold rounded-xl px-6 py-3
              hover:bg-green-600 transition-all transform hover:scale-[1.02] active:scale-95;
     }
 
     .btn-secondary {
-      @apply bg-gray-200 text-gray-700 font-semibold rounded-xl px-6 py-3 
+      @apply bg-gray-200 text-gray-700 font-semibold rounded-xl px-6 py-3
              hover:bg-gray-300 transition-all transform hover:scale-[1.02] active:scale-95;
     }
 
     .btn-circle {
-      @apply w-12 h-12 flex items-center justify-center rounded-full text-xl 
+      @apply w-12 h-12 flex items-center justify-center rounded-full text-xl
              transition-all hover:scale-110 active:scale-95;
     }
 
     #piecesList .piece-card {
-      @apply bg-white p-6 rounded-2xl shadow-md border-2 border-gray-200 hover:border-purple-300 
+      @apply bg-white p-6 rounded-2xl shadow-md border-2 border-gray-200 hover:border-purple-300
              transition-all transform hover:-translate-y-1 cursor-pointer;
+    }
+
+    .tab-button.active {
+        @apply bg-gray-100; /* ou une couleur plus visible pour l'onglet actif */
     }
   </style>
 </body>
