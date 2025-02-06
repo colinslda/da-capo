@@ -99,6 +99,58 @@ document.getElementById("logout")?.addEventListener("click", async () => {
 // Vérifier la session au chargement de l'application
 checkUserSession();
 
+// ⏱ MINUTEUR ⏱
+let timerInterval;
+let timeLeft; // Temps restant en secondes
+
+function startTimer() {
+    const minutes = parseInt(document.getElementById('minutesInput').value, 10) || 0;
+    const seconds = parseInt(document.getElementById('secondsInput').value, 10) || 0;
+    timeLeft = minutes * 60 + seconds;
+
+    if (timeLeft <= 0) {
+        alert("Veuillez entrer une durée valide.");
+        return;
+    }
+
+    timerInterval = setInterval(updateTimer, 1000);
+    updateDisplay(); // Mise à jour immédiate de l'affichage
+}
+
+function updateTimer() {
+    if (timeLeft <= 0) {
+        clearInterval(timerInterval);
+        timeLeft = 0; // Pour éviter les valeurs négatives
+        alert("Temps écoulé !"); // Optionnel: Jouer un son, changer l'affichage, etc.
+    } else {
+        timeLeft--;
+    }
+    updateDisplay();
+}
+
+function stopTimer() {
+    clearInterval(timerInterval);
+}
+
+function resetTimer() {
+    stopTimer();
+    document.getElementById('minutesInput').value = '00';
+    document.getElementById('secondsInput').value = '00';
+    timeLeft = 0; // Réinitialise le temps restant
+    updateDisplay();
+}
+
+function updateDisplay() {
+    const minutes = Math.floor(timeLeft / 60);
+    const seconds = timeLeft % 60;
+    document.getElementById('chronoDisplay').textContent = `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+}
+
+
+document.getElementById('startChrono')?.addEventListener('click', startTimer);
+document.getElementById('stopChrono')?.addEventListener('click', stopTimer);
+document.getElementById('resetChrono')?.addEventListener('click', resetTimer);
+
 // 🎵 MÉTRONOME 🎵 (Le reste de votre code métronome reste inchangé, il n'est pas lié à l'authentification)
 class Metronome {
     constructor() {
