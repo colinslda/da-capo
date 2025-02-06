@@ -67,11 +67,15 @@
       </div>
     </div>
 
-    <!-- Chrono - Style minimaliste coloré -->
-    <div id="chrono" class="tab-content hidden">
+<div id="chrono" class="tab-content hidden">
       <div class="max-w-sm mx-auto bg-white p-8 rounded-2xl shadow-md border border-green-50">
-        <h2 class="text-2xl font-bold mb-6 text-center text-green-600">Chronomètre</h2>
+        <h2 class="text-2xl font-bold mb-6 text-center text-green-600">Minuteur</h2>
         <div class="flex flex-col items-center space-y-6">
+          <div class="flex space-x-2 mb-4">
+            <input type="number" id="minutesInput" placeholder="Minutes" min="0" max="59" value="00" class="timer-input" />
+            <span class="text-4xl">:</span>
+            <input type="number" id="secondsInput" placeholder="Secondes" min="0" max="59" value="00" class="timer-input" />
+          </div>
           <div class="text-4xl font-mono bg-green-100 px-6 py-3 rounded-lg text-green-700" id="chronoDisplay">00:00</div>
           <div class="flex gap-3 flex-wrap justify-center">
             <button id="startChrono" class="btn-success">Démarrer</button>
