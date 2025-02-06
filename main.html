@@ -33,19 +33,23 @@
       <h2 class="text-3xl font-bold mb-6 text-purple-600">Répertoire</h2>
       <form id="addPiece" class="mb-8 bg-white p-6 rounded-2xl shadow-md border border-purple-50">
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <input type="text" id="pieceTitle" placeholder="Titre" class="input-light">
-          <input type="text" id="composer" placeholder="Compositeur" class="input-light">
-          <select id="pieceType" class="input-light">
+          <input type="text" id="pieceTitle" placeholder="Titre" class="input-light" required>
+          <input type="text" id="composer" placeholder="Compositeur" class="input-light" required>
+          <select id="pieceType" class="input-light" required>
+            <option value="">Choisir une catégorie</option>
             <option value="concerto">Concerto</option>
             <option value="sonate">Sonate</option>
             <option value="solo">Pièce solo</option>
+            <option value="etude">Étude/Caprice</option>
             <option value="technique">Technique</option>
           </select>
           <textarea id="notes" placeholder="Notes personnelles" class="input-light md:col-span-2 h-24"></textarea>
         </div>
         <button type="submit" class="mt-4 btn-primary w-full">➕ Ajouter une pièce</button>
       </form>
-      <div id="piecesList" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"></div>
+      <div id="piecesList" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        <p id="emptyListMessage" class="text-gray-500 hidden">Votre répertoire est vide. Ajoutez une pièce !</p>
+      </div>
     </div>
 
     <div id="metronome" class="tab-content hidden">
