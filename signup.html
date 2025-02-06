@@ -8,8 +8,9 @@
     // Import Firebase modules
     import { initializeApp } from "https://www.gstatic.com/firebasejs/11.2.0/firebase-app.js";
     import { getAuth, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/11.2.0/firebase-auth.js";
+    import { getFirestore, doc, setDoc } from "https://www.gstatic.com/firebasejs/11.2.0/firebase-firestore.js"; // Import Firestore
 
-    // Firebase configuration
+    // Firebase configuration (ensure this matches your Firebase project settings)
     const firebaseConfig = {
       apiKey: "AIzaSyDJFjq6AA-30mrI5Yagpy0n11fk6Wceo0k",
       authDomain: "dacapo-4e852.firebaseapp.com",
@@ -23,15 +24,38 @@
     // Initialize Firebase
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
+    const db = getFirestore(app); // Initialize Firestore
 
     document.addEventListener('DOMContentLoaded', () => {
       document.getElementById('signup-form').addEventListener('submit', async (e) => {
         e.preventDefault();
-        const email = document.getElementById('email').value;
-        const password = document.getElementById('password').value;
+
+        const email = document.getElementById('signupEmail').value; // Changed id to signupEmail
+        const password = document.getElementById('signupPassword').value; // Changed id to signupPassword
+        const firstName = document.getElementById('signupFirstName').value; // Get First Name
+        const lastName = document.getElementById('signupLastName').value;   // Get Last Name
+        const birthDate = document.getElementById('signupBirthDate').value; // Get Birth Date (optional)
+
 
         try {
           const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+          const user = userCredential.user; // Get user object after successful signup
+
+          // Prepare user profile data for Firestore
+          const userProfileData = {
+            uid: user.uid,
+            email: email,
+            firstName: firstName,
+            lastName: lastName,
+            birthDate: birthDate ? new Date(birthDate) : null // Convert to Date if not empty
+            // You can add more fields here if needed
+          };
+
+          // Save user profile data to Firestore
+          await setDoc(doc(db, "users", user.uid), userProfileData);
+          console.log("User profile saved to Firestore");
+
+
           // Inscription réussie
           window.location.href = "main.html";
         } catch (error) {
@@ -88,7 +112,10 @@
     }
 
     input[type="email"],
-    input[type="password"] {
+    input[type="password"],
+    input[type="text"], /* Style for text inputs */
+    input[type="date"] /* Style for date input */
+     {
       margin: 10px 0;
       padding: 12px;
       border: 2px solid #e5def0;
@@ -116,11 +143,9 @@
 </head>
 <body>
   <div class="login-container">
-    <h1>DA CAPO</h1>
+    <h1>DA CAPO - Inscription</h1>
     <form id="signup-form">
-      <input type="email" id="email" placeholder="Adresse email" required />
-      <input type="password" id="password" placeholder="Mot de passe" required />
-      <button type="submit">S'inscrire</button>
+      <input type="email" id="signupEmail" placeholder="Adresse email" required /> <input type="password" id="signupPassword" placeholder="Mot de passe" required /> <input type="text" id="signupFirstName" placeholder="Prénom" required />      <input type="text" id="signupLastName" placeholder="Nom" required />       <input type="date" id="signupBirthDate" placeholder="Date de naissance (optionnel)" /> <button type="submit">S'inscrire</button>
     </form>
   </div>
 </body>
