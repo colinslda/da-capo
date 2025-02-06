@@ -1,82 +1,105 @@
-// Initialisation du client Supabase
-const supabaseUrl = 'https://efnhqqgddfuxwmnrguns.supabase.co';
-const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVmbmhxcWdkZGZ1eHdtbnJndW5zIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Mzg1ODYyMzUsImV4cCI6MjA1NDE2MjIzNX0.XdVYATptiop5yAUtvPZCWxPo-gcKwYuflvsjvkqEG-w';
-const supabase = supabase.createClient(supabaseUrl, supabaseKey);
+// Import Firebase modules
+import { initializeApp } from "https://www.gstatic.com/firebasejs/11.2.0/firebase-app.js";
+import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/11.2.0/firebase-auth.js";
+
+// Firebase configuration
+const firebaseConfig = {
+    apiKey: "AIzaSyDJFjq6AA-30mrI5Yagpy0n11fk6Wceo0k",
+    authDomain: "dacapo-4e852.firebaseapp.com",
+    projectId: "dacapo-4e852",
+    storageBucket: "dacapo-4e852.firebasestorage.app",
+    messagingSenderId: "68504525719",
+    appId: "1:68504525719:web:65794607064db1fff9c2d2",
+    measurementId: "G-58VM0TCQ1M"
+};
+
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
 
 // Vérifier la session et charger les infos de l'utilisateur
-async function checkUserSession() {
-    const { data: { session }, error } = await supabase.auth.getSession();
-
-    if (error) {
-        console.error("Erreur de récupération de la session :", error);
-        return;
-    }
-
-    if (session) {
-        console.log("Utilisateur connecté :", session.user);
-        loadUserData(session.user);
-    } else {
-        console.log("Aucune session trouvée, redirection vers la connexion.");
-        window.location.href = "/login.html";
-    }
+function checkUserSession() {
+    onAuthStateChanged(auth, (user) => { // Ajout de 'auth' ici
+        if (user) {
+            // Utilisateur connecté
+            console.log("Utilisateur connecté :", user);
+            loadUserData(user);
+        } else {
+            // Utilisateur non connecté
+            console.log("Aucune session trouvée, redirection vers la connexion.");
+            window.location.href = "/login.html";
+        }
+    });
 }
 
 // Charger les infos utilisateur dans le profil
 async function loadUserData(user) {
     if (!user) return;
 
-    document.getElementById("userName").textContent = user.user_metadata?.full_name || "Nom inconnu";
+    document.getElementById("userName").textContent = user.displayName || "Nom inconnu";
     document.getElementById("userEmail").textContent = user.email;
 
-    try {
-        const { data, error } = await supabase
-            .from("users")
-            .select("bio")
-            .eq("id", user.id)
-            .single();
+    // La partie concernant la bio Supabase est commentée car elle n'est plus pertinente avec Firebase Auth directement.
+    // Si vous souhaitez gérer la bio des utilisateurs avec Firebase, il faudra adapter cette partie (ex: Firestore).
 
-        if (error) throw error;
+    // try {
+    //     const { data, error } = await supabase
+    //         .from("users")
+    //         .select("bio")
+    //         .eq("id", user.id)
+    //         .single();
 
-        if (data && data.bio) {
-            document.getElementById("userBio").value = data.bio;
-        }
-    } catch (err) {
-        console.error("Erreur lors du chargement de la bio :", err);
-    }
+    //     if (error) throw error;
+
+    //     if (data && data.bio) {
+    //         document.getElementById("userBio").value = data.bio;
+    //     }
+    // } catch (err) {
+    //     console.error("Erreur lors du chargement de la bio :", err);
+    // }
 }
 
-// Sauvegarder la biographie
+// Sauvegarder la biographie (COMMENTÉ - à adapter si nécessaire pour Firebase)
 document.getElementById("saveBio")?.addEventListener("click", async () => {
-    const bio = document.getElementById("userBio").value;
-    const { data: { session } } = await supabase.auth.getSession();
+    // Cette partie est commentée car elle dépendait de Supabase.
+    // Il faudra adapter la logique de sauvegarde de la bio si vous souhaitez la conserver avec Firebase.
+    alert("Fonction de sauvegarde de la bio désactivée pour Firebase. À réimplémenter si nécessaire.");
 
-    if (!session) return;
+    // const bio = document.getElementById("userBio").value;
+    // const { data: { session } } = await supabase.auth.getSession();
 
-    try {
-        const { error } = await supabase
-            .from("users")
-            .update({ bio })
-            .eq("id", session.user.id);
+    // if (!session) return;
 
-        if (error) throw error;
+    // try {
+    //     const { error } = await supabase
+    //         .from("users")
+    //         .update({ bio })
+    //         .eq("id", session.user.id);
 
-        alert("Biographie enregistrée !");
-    } catch (err) {
-        alert("Erreur lors de la sauvegarde de la bio : " + err.message);
-    }
+    //     if (error) throw error;
+
+    //     alert("Biographie enregistrée !");
+    // } catch (err) {
+    //     alert("Erreur lors de la sauvegarde de la bio : " + err.message);
+    // }
 });
 
 // Déconnexion et redirection vers login.html
 document.getElementById("logout")?.addEventListener("click", async () => {
-    await supabase.auth.signOut();
-    localStorage.removeItem("supabaseSession"); // Supprime la session locale
-    window.location.href = "/login.html"; // Redirection après déconnexion
+    try {
+        await signOut(auth); // Ajout de 'auth' ici
+        // Déconnexion réussie
+        window.location.href = "/login.html";
+    } catch (error) {
+        console.error("Erreur lors de la déconnexion:", error);
+        alert("Erreur lors de la déconnexion.");
+    }
 });
 
 // Vérifier la session au chargement de l'application
 checkUserSession();
 
-// 🎵 MÉTRONOME 🎵
+// 🎵 MÉTRONOME 🎵 (Le reste de votre code métronome reste inchangé, il n'est pas lié à l'authentification)
 class Metronome {
     constructor() {
         this.isPlaying = false;
@@ -127,7 +150,9 @@ class Metronome {
     updateDisplay() {
         document.getElementById('bpmValue').textContent = this.bpm;
         document.getElementById('bpmRange').value = this.bpm;
+        document.getElementById('tempoPercent').textContent = Math.round(((this.bpm - 40) / (240 - 40)) * 100) + '%'; // Pourcentage
     }
+
 
     playClick() {
         const osc = this.audioContext.createOscillator();
@@ -194,7 +219,7 @@ document.addEventListener('DOMContentLoaded', () => {
 function switchTab(tabId) {
     document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
     document.querySelectorAll('.tab-button').forEach(btn => btn.classList.remove('active'));
-    
+
     document.getElementById(tabId)?.classList.add('active');
     event.target.classList.add('active');
 }
